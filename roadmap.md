@@ -16,14 +16,14 @@ This roadmap guides you through implementing neural networks from scratch, focus
 - Matrix addition/subtraction
 
 ### 2. Implement gradient computation
-- Linear functions: f(x) = ax + b
-- Quadratic functions: f(x) = ax² + bx + c
-- Sigmoid function: f(x) = 1/(1 + e^(-x))
+- Linear functions: $$f(x) = ax + b$$
+- Quadratic functions: $$f(x) = ax² + bx + c$$
+- Sigmoid function: $$f(x) = \frac{1}{1 + e^{-x}}$$
 - Understand partial derivatives
 
 ### 3. Implement chain rule
 - Manual computation for composite functions
-- Example: f(g(h(x))) where f, g, h are simple functions
+- Example: $$f(g(h(x)))$$ where f, g, h are simple functions
 - Practice with nested functions
 
 ### 4. Create simple linear regression
@@ -74,9 +74,9 @@ This roadmap guides you through implementing neural networks from scratch, focus
 - Chain rule through the entire network
 
 ### 12. Add different activation functions
-- Sigmoid: σ(x) = 1/(1 + e^(-x))
-- Tanh: tanh(x) = (e^x - e^(-x))/(e^x + e^(-x))
-- ReLU: max(0, x)
+- Sigmoid: $$\sigma(x) = \frac{1}{1 + e^{-x}}$$
+- Tanh: $$\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
+- ReLU: $$\max(0, x)$$
 - Implement their derivatives
 
 ### 13. Implement mini-batch processing
@@ -97,9 +97,9 @@ This roadmap guides you through implementing neural networks from scratch, focus
 
 ### 15. Add regularization techniques
 - **L1 Regularization (Lasso)**
-  - Add |w| to loss function
+  - Add $$|w|$$ to loss function
 - **L2 Regularization (Ridge)**
-  - Add w² to loss function
+  - Add $$w²$$ to loss function
 - **Dropout**
   - Randomly zero neurons during training
 
