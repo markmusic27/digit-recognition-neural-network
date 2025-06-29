@@ -10,12 +10,37 @@ def sigmoid_derrivative(a):
 
 class Layer:
     def __init__(self, input_size, output_size):
-        # implement function
-        return 1
+        # Xavier initialization (normalizes matrix)
+        self.W = np.random.randn(output_size, input_size) * np.sqrt(1/input_size)
         
-    def forward(self, x):
-        return 1
+        # Set bias to zero at first
+        self.b = np.zeros((output_size, 1))
     
-    def backward(sekf, da, learning_rate):
-        return 1
+    # Returns activation given, old activations, and weights
+    def forward(self, x):
+        self.x = x
+        self.z = np.dot(self.W, x) + self.b
+        self.a = sigmoid(self.z)
+        
+        return self.a
+        
+    # Propagate error backwards, takes in
+    def backward(self, da, learning_rate):
+        # da comes from next layer or loss function (mean squared error)
+        dz = da * sigmoid_derrivative(self.a)
+        
+        # Compute dW and db
+        dW = np.dot(dz, self.x.T)
+        db = dz * 1
+        
+        # Compute gradient w.r.t input
+        dx = np.dot(self.W.T, dz)
+        
+        # Gradient descent
+        self.W = self.W - learning_rate*dW
+        self.b = self.b - learning_rate*db
+        
+        return dx
+        
+        
     
