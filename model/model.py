@@ -2,8 +2,8 @@ import numpy as np
 from model.layers import Layer
 
 class NeuralNetwork:
-    def __init__(self, layer_sizes):
-        
+    def __init__(self, layer_sizes, batch_size=32):
+        self.batch_size = batch_size
         self.layers = []
         
         for i in range(len(layer_sizes) - 1):
