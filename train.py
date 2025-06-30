@@ -41,7 +41,6 @@ def train(model: NeuralNetwork, X_train, y_train, epochs, learning_rate):
         
         # Calculate timing information
         elapsed_time = time.time() - start_time
-        epoch_time = time.time() - epoch_start_time
         avg_epoch_time = elapsed_time / (epoch + 1)
         remaining_epochs = epochs - (epoch + 1)
         estimated_remaining = avg_epoch_time * remaining_epochs
@@ -61,5 +60,5 @@ if __name__ == "__main__":
     
     y_encoded = one_hot_encode(y_train)
     
-    train(model, X_train, y_encoded, epochs=100, learning_rate=0.1)
+    train(model, X_train, y_encoded, epochs=3, learning_rate=0.1)
     
