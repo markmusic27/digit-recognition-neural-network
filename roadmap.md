@@ -4,7 +4,7 @@
 
 A roadmap for implementing a basic neural network to classify handwritten digits from the MNIST dataset using only NumPy and Pandas. You will build everything manually, including forward and backward propagation.
 
----
+
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ A roadmap for implementing a basic neural network to classify handwritten digits
 - Experience with NumPy and Pandas
 - MNIST data available with labels
 
----
+
 
 ## Project Structure (Suggested)
 - Python programming
@@ -39,66 +39,53 @@ root/
 
 ### Phase 1: Data Preparation
 
-- [ ] Load MNIST data using Pandas or NumPy
-- [ ] Normalize image pixel values to [0, 1]
-- [ ] One-hot encode the labels
-- [ ] Split dataset into training and testing sets
+- [x] Load MNIST data using Pandas or NumPy
+- [x] Normalize image pixel values to [0, 1]
+- [x] One-hot encode the labels
+- [x] Split dataset into training and testing sets
 
----
+
 
 ### Phase 2: Forward Propagation
 
-- [ ] Define a Neuron (weights, bias, activation)
-- [ ] Implement activation functions (sigmoid and its derivative)
-- [ ] Build a Layer class (collection of neurons)
-- [ ] Implement the forward pass: z = Wx + b, a = activation(z)
-- [ ] Stack layers to create a multi-layer perceptron
-- [ ] Implement a prediction method (e.g., argmax output)
+- [x] Define a Neuron (weights, bias, activation)
+- [x] Implement activation functions (sigmoid and its derivative)
+- [x] Build a Layer class (collection of neurons)
+- [x] Implement the forward pass: z = Wx + b, a = activation(z)
+- [x] Stack layers to create a multi-layer perceptron
+- [x] Implement a prediction method (e.g., argmax output)
 
----
+
 
 ### Phase 3: Backpropagation
 
-- [ ] Define cost function (cross-entropy)
-- [ ] Compute gradient of cost w.r.t. output activations
-- [ ] Apply chain rule to propagate error backward
-- [ ] Derive gradients w.r.t. weights and biases
-- [ ] Implement parameter updates using gradient descent
+- [x] Define cost function (MSE)
+- [x] Compute gradient of cost w.r.t. output activations
+- [x] Apply chain rule to propagate error backward
+- [x] Derive gradients w.r.t. weights and biases
+- [x] Implement parameter updates using gradient descent
 
----
+
 
 ### Phase 4: Training Loop
 
-- [ ] Create a loop over mini-batches
-- [ ] Perform forward pass
-- [ ] Compute loss
-- [ ] Perform backward pass (backpropagation)
-- [ ] Update weights and biases
-- [ ] Track loss and accuracy during training
+- [x] Perform forward pass
+- [x] Compute loss
+- [x] Perform backward pass (backpropagation)
+- [x] Update weights and biases
+- [x] Track loss and accuracy during training
 
----
+
 
 ### Phase 5: Evaluation
 
-- [ ] Evaluate accuracy on the test dataset
+re- [ ] Evaluate accuracy on the test dataset
 - [ ] Analyze misclassified digits
 - [ ] (Optional) Display confusion matrix
 
----
+
 
 ## Optional Extensions
 
-- [ ] Add support for ReLU and tanh activation functions
-- [ ] Use softmax for the output layer
-- [ ] Add learning rate decay or momentum
-- [ ] Train with multiple hidden layers
-- [ ] Visualize training curves (loss and accuracy)
-
----
-
-## Debugging Tips
-
-- Start with a small subset of data (e.g., 1000 samples)
-- Check shapes of matrices at every step
-- Verify that loss decreases over epochs
-- Print gradients to ensure they aren't vanishing or exploding
+- [x] Train with multiple hidden layers
+- [x] Visualize training curves (loss and accuracy)

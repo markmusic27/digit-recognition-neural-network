@@ -10,6 +10,7 @@ def sigmoid_derivative(a):
 
 class Layer:
     def __init__(self, input_size, output_size):
+        
         # Xavier initialization (normalizes matrix)
         self.W = np.random.randn(output_size, input_size) * np.sqrt(1/input_size)
         
@@ -26,14 +27,14 @@ class Layer:
         
     # Propagate error backwards, takes in da from next layer
     def backward(self, da, learning_rate):
-        # Step 1: dz = da * sigmoid'(z)
-        sig_der_at_z = sigmoid_derivative(self.a)  # same shape as da
+        # Step 1: dz = da * sigmoid'(z) 
+        sig_der_at_z = sigmoid_derivative(self.a)  # Shape: (output_size, 1)
         dz = da * sig_der_at_z
 
         # Step 2: dW = dz @ x.T
         dW = dz @ self.x.T
 
-        # Step 3: db = dz
+        # Step 3: db = dzs
         db = dz
 
         # Step 4: Gradient descent step

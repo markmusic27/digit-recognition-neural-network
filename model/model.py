@@ -1,9 +1,9 @@
 import numpy as np
+import pickle
 from model.layers import Layer
 
 class NeuralNetwork:
-    def __init__(self, layer_sizes, batch_size=32):
-        self.batch_size = batch_size
+    def __init__(self, layer_sizes):
         self.layers = []
         
         for i in range(len(layer_sizes) - 1):
@@ -30,4 +30,33 @@ class NeuralNetwork:
         
         # Picks output with highest activation
         return np.argmax(output)
+    
+    def save(self, filepath):
+        weights = []
+        
+        for layer in self.layers:
+            pair = (layer.W, layer.b)
+            weights.append(pair)
+            
+        with open(filepath, "wb") as file:
+            pickle.dump(weights, file)
+    
+    def load(self, filepath):
+        with open(filepath, "rb") as file:
+            weights = pickle.load(file)
+            
+            if len(self.layers) != len(weights):
+                raise ValueError("Number of layers don't match")
+            
+            for i in range(len(self.layers)):
+                W, b = weights[i]
+
+                # Check that the number of neurons match
+                if self.layers[i].W.shape != W.shape or self.layers[i].b.shape != b.shape:
+                    raise ValueError(f"Shape mismatch in layer {i}")
+                
+                self.layers[i].W = W
+                self.layers[i].b = b
+                
+                
     

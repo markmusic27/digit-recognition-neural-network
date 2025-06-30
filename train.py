@@ -55,10 +55,19 @@ def train(model: NeuralNetwork, X_train, y_train, epochs, learning_rate):
         
 
 if __name__ == "__main__":
+    # Instanciate network
     model = NeuralNetwork([784, 16, 16, 10])
     X_train, y_train, _, _ = load_data()
     
     y_encoded = one_hot_encode(y_train)
     
-    train(model, X_train, y_encoded, epochs=3, learning_rate=0.1)
+    # Train network
+    EPOCHS = 300
+    LEARNING_RATE = 0.1
+    train(model, X_train, y_encoded, epochs=EPOCHS, learning_rate=LEARNING_RATE)
+    
+    # Save weights
+    lr_str = str(LEARNING_RATE).replace(".", "_")
+    filename = f"model_ep{EPOCHS}_lr{lr_str}.pkl"
+    model.save(f"model/saved_models/{filename}")
     
