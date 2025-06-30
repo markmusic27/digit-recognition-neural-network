@@ -1,8 +1,8 @@
 import numpy as np
+from model.layers import Layer
 
 class NeuralNetwork:
     def __init__(self, layer_sizes):
-        from layers import Layer
         
         self.layers = []
         
@@ -23,7 +23,7 @@ class NeuralNetwork:
         
         # Back to front
         for layer in reversed(self.layers):
-            current_da = layer.backward(da, learning_rate)
+            current_da = layer.backward(current_da, learning_rate)
             
     def predict(self, x):
         output = self.forward(x)

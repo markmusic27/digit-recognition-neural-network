@@ -5,7 +5,7 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 # Note that this assumes that a = sigmoid(z)
-def sigmoid_derrivative(a):
+def sigmoid_derivative(a):
     return a * (1-a)
 
 class Layer:
@@ -27,11 +27,11 @@ class Layer:
     # Propagate error backwards, takes in
     def backward(self, da, learning_rate):
         # da comes from next layer or loss function (mean squared error)
-        dz = da * sigmoid_derrivative(self.a)
+        dz = da * sigmoid_derivative(self.a)
         
         # Compute dW and db
         dW = np.dot(dz, self.x.T)
-        db = dz * 1
+        db = dz  # For single example, bias gradient is just dz
         
         # Compute gradient w.r.t input
         dx = np.dot(self.W.T, dz)

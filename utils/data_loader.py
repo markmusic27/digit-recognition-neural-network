@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import struct
 
 def load_images(path):
@@ -36,12 +35,3 @@ def load_data():
     
     return X_train, y_train, X_test, y_test
 
-def visualize(X, y):
-    plt.imshow(X.reshape(28, 28), cmap="gray")
-    plt.title(f"Label: {y}")
-    plt.axis("off")
-    plt.show()
-    
-def one_hot_encode(y, num_classes=10):
-    return np.eye(num_classes)[y]
-    

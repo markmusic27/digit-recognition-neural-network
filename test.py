@@ -1,6 +1,5 @@
-import matplotlib.pyplot as plt
-from utils.data_loader import load_data, visualize
+from utils.data_loader import load_data
 
 a, b, c, d = load_data()
 
-visualize(a[513], b[513])
+print(a[0])
