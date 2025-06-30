@@ -24,23 +24,26 @@ class Layer:
         
         return self.a
         
-    # Propagate error backwards, takes in
+    # Propagate error backwards, takes in da from next layer
     def backward(self, da, learning_rate):
-        # da comes from next layer or loss function (mean squared error)
-        dz = da * sigmoid_derivative(self.a)
-        
-        # Compute dW and db
-        dW = np.dot(dz, self.x.T)
-        db = dz  # For single example, bias gradient is just dz
-        
-        # Compute gradient w.r.t input
-        dx = np.dot(self.W.T, dz)
-        
-        # Gradient descent
-        self.W = self.W - learning_rate*dW
-        self.b = self.b - learning_rate*db
-        
+        # Step 1: dz = da * sigmoid'(z)
+        sig_der_at_z = sigmoid_derivative(self.a)  # same shape as da
+        dz = da * sig_der_at_z
+
+        # Step 2: dW = dz @ x.T
+        dW = dz @ self.x.T
+
+        # Step 3: db = dz
+        db = dz
+
+        # Step 4: Gradient descent step
+        self.W -= learning_rate * dW
+        self.b -= learning_rate * db
+
+        # Step 5: dx = W.T @ dz
+        dx = self.W.T @ dz
+
         return dx
-        
+
         
     
