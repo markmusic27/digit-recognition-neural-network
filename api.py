@@ -1,25 +1,18 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
+from contextlib import asynccontextmanager
 import numpy as np
 from model.model import NeuralNetwork
 import uvicorn
 
-app = FastAPI(title="Digit Recognition API", version="1.0.0")
-
 # Global model variable - loaded once at startup
 model = None
 
-class PredictionRequest(BaseModel):
-    pixels: List[float]  # 784 pixel values (0-1 normalized)
-
-class PredictionResponse(BaseModel):
-    predicted_digit: int
-    confidence_scores: List[float]  # Raw output probabilities for all 10 digits
-
-@app.on_event("startup")
-async def load_model():
-    """Load the trained model once at startup"""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application lifespan - startup and shutdown events"""
+    # Startup
     global model
     print("Loading neural network model...")
     
@@ -30,6 +23,24 @@ async def load_model():
     except Exception as e:
         print(f"Error loading model: {e}")
         raise e
+    
+    yield
+    
+    # Shutdown (cleanup if needed)
+    print("Shutting down...")
+
+app = FastAPI(
+    title="Digit Recognition API", 
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+class PredictionRequest(BaseModel):
+    pixels: List[float]  # 784 pixel values (0-1 normalized)
+
+class PredictionResponse(BaseModel):
+    predicted_digit: int
+    confidence_scores: List[float]  # Raw output probabilities for all 10 digits
 
 @app.get("/")
 async def root():
