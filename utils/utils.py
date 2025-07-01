@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import json
-from data_loader import load_data
 
 def visualize_datapoint(X, y):
     plt.imshow(X.reshape(28, 28), cmap="gray")
@@ -63,8 +62,9 @@ def get_test_sample(index=0):
     # Create a properly formatted cURL command
     json_payload = json.dumps(payload)
     
-    curl_command = f'''curl -X POST "http://localhost:8000/predict" \\
-  -H "Content-Type: application/json" \\
+    curl_command = f'''curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: KEY" \
   -d '{json_payload}' '''
     
     print(curl_command)

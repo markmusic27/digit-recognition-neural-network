@@ -1,13 +1,19 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Request
 from pydantic import BaseModel
 from typing import List
 from contextlib import asynccontextmanager
 import numpy as np
 from model.model import NeuralNetwork
 import uvicorn
+import os
+from dotenv import load_dotenv
 
 # Global model variable - loaded once at startup
 model = None
+
+# Load .env
+load_dotenv()
+API_KEY = os.environ.get("DIGIT_API_KEY")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,12 +48,17 @@ class PredictionResponse(BaseModel):
     predicted_digit: int
     confidence_scores: List[float]  # Raw output probabilities for all 10 digits
 
-@app.get("/")
+async def verify_api_key(request: Request):
+    api_key = request.headers.get("X-API-Key")
+    if api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
+@app.get("/", dependencies=[Depends(verify_api_key)])
 async def root():
     """Health check endpoint"""
     return {"message": "Digit Recognition API is running!", "model_loaded": model is not None}
 
-@app.post("/predict", response_model=PredictionResponse)
+@app.post("/predict", response_model=PredictionResponse, dependencies=[Depends(verify_api_key)])
 async def predict_digit(request: PredictionRequest):
     """
     Predict a digit from 784 pixel values.
