@@ -30,8 +30,8 @@ def load_data():
     X_train = load_images(f"{path}/train-images.idx3-ubyte")
     y_train = load_labels(f"{path}/train-labels.idx1-ubyte")
     
-    X_test = load_images(f"{path}/train-images.idx3-ubyte")
-    y_test = load_labels(f"{path}/train-labels.idx1-ubyte")
+    X_test = load_images(f"{path}/t10k-images.idx3-ubyte")
+    y_test = load_labels(f"{path}/t10k-labels.idx1-ubyte")
     
     return X_train, y_train, X_test, y_test
 

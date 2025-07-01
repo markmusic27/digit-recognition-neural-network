@@ -62,7 +62,7 @@ if __name__ == "__main__":
     y_encoded = one_hot_encode(y_train)
     
     # Train network
-    EPOCHS = 300
+    EPOCHS = 10
     LEARNING_RATE = 0.1
     train(model, X_train, y_encoded, epochs=EPOCHS, learning_rate=LEARNING_RATE)
     
@@ -70,4 +70,6 @@ if __name__ == "__main__":
     lr_str = str(LEARNING_RATE).replace(".", "_")
     filename = f"model_ep{EPOCHS}_lr{lr_str}.pkl"
     model.save(f"model/saved_models/{filename}")
+    
+    print(f"Saved model to: model/saved_models/{filename}")
     
