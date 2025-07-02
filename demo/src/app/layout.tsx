@@ -35,7 +35,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${louize.variable} ${sf.variable}`}>
-      <body>{children}</body>
+      <body className="bg-black text-white">{children}</body>
     </html>
   );
 }
