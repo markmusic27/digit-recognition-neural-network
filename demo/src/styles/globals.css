@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+  --font-sans: var(--font-sf), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+@layer utilities {
+  .font-louize {
+    font-family: var(--font-louize);
+  }
+  
+  .font-sf {
+    font-family: var(--font-sf);
+  }
 }
