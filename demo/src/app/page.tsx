@@ -14,18 +14,11 @@ export default function HomePage() {
 
   useEffect(() => {
     function handleResize() {
-      setWindowSize({
-        width: window.visualViewport?.width ?? window.innerWidth,
-        height: window.visualViewport?.height ?? window.innerHeight,
-      });
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     }
     handleResize();
-    window.visualViewport?.addEventListener("resize", handleResize);
     window.addEventListener("resize", handleResize);
-    return () => {
-      window.visualViewport?.removeEventListener("resize", handleResize);
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -59,22 +52,10 @@ export default function HomePage() {
     return 0.5 * height - 146;
   }
 
-  function calcMarginButton(height: number) {
-    return 0.5 * height - 146;
-  }
-
-  function getResponsiveTextSize(width: number) {
-    if (width < 640) return "32px"; // mobile
-    if (width < 768) return "36px"; // small tablet
-    if (width < 1024) return "42px"; // tablet
-    if (width < 1280) return "48px"; // desktop
-    return "56px"; // large desktop
-  }
-
   return (
     <main className="bg-black">
       <div className="flex w-full flex-col">
-        <div className="relative h-[85vh]">
+        <div className="relative h-[85dvh]">
           <div
             className="absolute left-1/2 z-5 -translate-x-1/2 transition-all duration-600"
             style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
