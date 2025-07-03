@@ -17,7 +17,7 @@ export default function HomePage() {
       return (
         typeof window !== "undefined" &&
         /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-        !(window as any).MSStream
+        !("MSStream" in window)
       );
     }
     function handleResize() {
