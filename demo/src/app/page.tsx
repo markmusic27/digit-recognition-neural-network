@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Board from "~/components/Board";
 import MathPreview from "~/components/MathPreview";
 import Blur from "~/components/Blur";
@@ -30,11 +31,7 @@ export default function HomePage() {
     }, 650);
 
     setTimeout(() => {
-      window.scrollBy({
-        top: 1,
-        left: 0,
-        behavior: "smooth",
-      });
+      window.scrollBy(0, 1);
     }, 5);
 
     return () => {
@@ -96,7 +93,7 @@ export default function HomePage() {
           />
 
           <div
-            className="absolute z-[0] w-full px-[30px] transition-opacity duration-300"
+            className="absolute z-[0] w-full px-[30px] transition-all duration-300"
             style={{
               bottom: `${calcMarginHeader(windowSize.height)}px`,
               opacity: headerVisible ? 1 : 0,
