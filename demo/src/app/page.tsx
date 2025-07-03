@@ -78,7 +78,14 @@ export default function HomePage() {
               className="flex justify-center transition-opacity duration-300"
               style={{ opacity: buttonVisible ? 1 : 0 }}
             >
-              <CustomButton onClick={() => {}} text="Draw Digit" icon="􀆿" />
+              <CustomButton
+                onClick={() => {
+                  // TODO: Run neural network
+                  console.log("RUN NEURAL NETWORK");
+                }}
+                text="Draw Digit"
+                icon="􀆿"
+              />
             </div>
           </div>
           <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />
