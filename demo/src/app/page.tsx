@@ -80,7 +80,7 @@ export default function HomePage() {
               <div className="h-[20px] md:h-[60px]" />
             </div>
             <div
-              className="flex justify-center transition-opacity duration-300"
+              className="flex justify-center gap-[10px] transition-opacity duration-300"
               style={{ opacity: buttonVisible ? 1 : 0 }}
             >
               <CustomButton
@@ -91,14 +91,21 @@ export default function HomePage() {
                 text={boardIsClear ? "Draw Digit" : "Predict Digit"}
                 icon="􀆿"
               />
-              <CustomButton
-                onClick={() => {
-                  // TODO: Run neural network
-                  console.log("Clear board");
-                }}
-                text="Clear"
-                secondary={true}
-              />
+              <div
+                className={`transition-opacity duration-300 ${
+                  boardIsClear ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+              >
+                {!boardIsClear && (
+                  <CustomButton
+                    onClick={() => {
+                      boardRef.current?.clearBoard();
+                    }}
+                    text="Clear"
+                    secondary={true}
+                  />
+                )}
+              </div>
             </div>
           </div>
           <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />

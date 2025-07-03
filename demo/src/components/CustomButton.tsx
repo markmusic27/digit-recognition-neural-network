@@ -53,7 +53,7 @@ const CustomButton = ({
           </p>
         )}
         <p
-          className={`font-sf mb-[2px] text-[16px] font-[400] text-[${!secondary ? "#1A1A1A" : "#F6F6F6"}]`}
+          className={`font-sf text-[16px] font-[400] text-[${!secondary ? "#1A1A1A" : "#F6F6F6"}]`}
         >
           <AnimatedText text={text ?? ""} />
         </p>
