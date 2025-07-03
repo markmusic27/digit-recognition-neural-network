@@ -8,7 +8,7 @@ interface BlurProps {
 const Blur = ({ blur = 0, zIndex = 0, opacity = 1, top = 0 }: BlurProps) => {
   return (
     <div
-      className={`absolute left-1/2 -translate-x-1/2 z-[${zIndex}] opacity-[${opacity}]`}
+      className={`absolute left-1/2 z-[${zIndex}] -translate-x-1/2 opacity-[0.7] transition-all duration-600 md:opacity-[1]`}
       style={{ top: `${top}px` }}
     >
       <img

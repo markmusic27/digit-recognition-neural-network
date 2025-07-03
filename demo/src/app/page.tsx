@@ -8,6 +8,7 @@ import Header from "~/components/Header";
 
 export default function HomePage() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [headerVisible, setHeaderVisible] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -18,6 +19,14 @@ export default function HomePage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHeaderVisible(true);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   function calcMarginHeader(height: number) {
     let spacing = 0.3 * height - 199.1;
 
@@ -25,11 +34,19 @@ export default function HomePage() {
 
     console.log();
 
-    return 0.425 * height + (146 + spacing);
+    return 0.4 * height + (146 + spacing);
   }
 
   function calcMarginBoard(height: number) {
     return 0.5 * height - 146;
+  }
+
+  function getResponsiveTextSize(width: number) {
+    if (width < 640) return "32px"; // mobile
+    if (width < 768) return "36px"; // small tablet
+    if (width < 1024) return "42px"; // tablet
+    if (width < 1280) return "48px"; // desktop
+    return "56px"; // large desktop
   }
 
   return (
@@ -37,34 +54,35 @@ export default function HomePage() {
       <div className="flex w-full flex-col">
         <div className="relative h-[85vh]">
           <div
-            className="absolute left-1/2 z-5 -translate-x-1/2"
+            className="absolute left-1/2 z-5 -translate-x-1/2 transition-all duration-600"
             style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
           >
             <Board />
           </div>
-          <Blur
-            blur={50}
-            zIndex={4}
-            opacity={1}
-            top={calcMarginBoard(windowSize.height)}
-          />
+          <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />
           <Blur
             blur={100}
             zIndex={3}
-            opacity={1}
             top={calcMarginBoard(windowSize.height)}
           />
           <Blur
-            blur={400}
+            blur={300}
             zIndex={2}
-            opacity={1}
+            top={calcMarginBoard(windowSize.height)}
+          />
+          <Blur
+            blur={700}
+            zIndex={3}
             top={calcMarginBoard(windowSize.height)}
           />
           <div
-            className="absolute left-1/2 z-[0] -translate-x-1/2"
-            style={{ bottom: `${calcMarginHeader(windowSize.height)}px` }}
+            className="absolute z-[0] w-full px-[30px] transition-opacity duration-300"
+            style={{
+              bottom: `${calcMarginHeader(windowSize.height)}px`,
+              opacity: headerVisible ? 1 : 0,
+            }}
           >
-            <Header />
+            <Header windowWidth={windowSize.width} />
           </div>
         </div>
         <MathPreview />

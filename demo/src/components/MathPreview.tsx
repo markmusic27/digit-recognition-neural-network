@@ -37,7 +37,7 @@ const MathPreview = () => {
   };
 
   return (
-    <div className={`max-w-[1200px] ${padding}`}>
+    <div className={`max-w-[1200px] ${padding} z-[1]`}>
       <div className="flex flex-col gap-[18px]">
         <button
           className={`justify-left flex cursor-pointer flex-row items-center gap-[8px] transition-opacity duration-200 ${isAtTop ? "opacity-100" : "pointer-events-none opacity-0"}`}
