@@ -2,12 +2,14 @@ interface BlurProps {
   blur?: number;
   zIndex?: number;
   opacity?: number;
+  top?: number;
 }
 
-const Blur = ({ blur = 0, zIndex = 0, opacity = 1 }: BlurProps) => {
+const Blur = ({ blur = 0, zIndex = 0, opacity = 1, top = 0 }: BlurProps) => {
   return (
     <div
-      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[${zIndex}] opacity-[${opacity}]`}
+      className={`absolute left-1/2 -translate-x-1/2 z-[${zIndex}] opacity-[${opacity}]`}
+      style={{ top: `${top}px` }}
     >
       <img
         src="/images/color.webp"

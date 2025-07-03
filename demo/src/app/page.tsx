@@ -18,19 +18,54 @@ export default function HomePage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const boardSize = 292;
+  function calcMarginHeader(height: number) {
+    let spacing = 0.3 * height - 199.1;
+
+    spacing = spacing > 15 ? spacing : 15;
+
+    console.log();
+
+    return 0.425 * height + (146 + spacing);
+  }
+
+  function calcMarginBoard(height: number) {
+    return 0.5 * height - 146;
+  }
 
   return (
     <main className="bg-black">
       <div className="flex w-full flex-col">
         <div className="relative h-[85vh]">
-          <div className="absolute top-1/2 left-1/2 z-4 -translate-x-1/2 -translate-y-1/2">
+          <div
+            className="absolute left-1/2 z-5 -translate-x-1/2"
+            style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
+          >
             <Board />
           </div>
-          <Blur blur={50} zIndex={3} opacity={1} />
-          <Blur blur={100} zIndex={2} opacity={1} />
-          <Blur blur={400} zIndex={1} opacity={1} />
-          <Header />
+          <Blur
+            blur={50}
+            zIndex={4}
+            opacity={1}
+            top={calcMarginBoard(windowSize.height)}
+          />
+          <Blur
+            blur={100}
+            zIndex={3}
+            opacity={1}
+            top={calcMarginBoard(windowSize.height)}
+          />
+          <Blur
+            blur={400}
+            zIndex={2}
+            opacity={1}
+            top={calcMarginBoard(windowSize.height)}
+          />
+          <div
+            className="absolute left-1/2 z-[0] -translate-x-1/2"
+            style={{ bottom: `${calcMarginHeader(windowSize.height)}px` }}
+          >
+            <Header />
+          </div>
         </div>
         <MathPreview />
       </div>
