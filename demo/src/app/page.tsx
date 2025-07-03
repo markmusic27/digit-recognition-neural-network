@@ -13,58 +13,18 @@ export default function HomePage() {
   const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    // Detect iOS
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
     function handleResize() {
-      if (isIOS && window.visualViewport) {
-        setWindowSize({
-          width: window.visualViewport.width,
-          height: window.visualViewport.height,
-        });
-      } else {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-      }
+      setWindowSize({
+        width: window.visualViewport?.width || window.innerWidth,
+        height: window.visualViewport?.height || window.innerHeight,
+      });
     }
-
-    function handleVisualViewportChange() {
-      if (isIOS && window.visualViewport) {
-        setWindowSize({
-          width: window.visualViewport.width,
-          height: window.visualViewport.height,
-        });
-      }
-    }
-
     handleResize();
-
-    // Add appropriate event listeners based on platform
-    if (isIOS && window.visualViewport) {
-      window.visualViewport.addEventListener(
-        "resize",
-        handleVisualViewportChange,
-      );
-      window.visualViewport.addEventListener(
-        "scroll",
-        handleVisualViewportChange,
-      );
-    } else {
-      window.addEventListener("resize", handleResize);
-    }
-
+    window.visualViewport?.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      if (isIOS && window.visualViewport) {
-        window.visualViewport.removeEventListener(
-          "resize",
-          handleVisualViewportChange,
-        );
-        window.visualViewport.removeEventListener(
-          "scroll",
-          handleVisualViewportChange,
-        );
-      } else {
-        window.removeEventListener("resize", handleResize);
-      }
+      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
