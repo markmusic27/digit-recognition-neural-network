@@ -13,8 +13,17 @@ export default function HomePage() {
   const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
+    function isIOS() {
+      return (
+        typeof window !== "undefined" &&
+        /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+        !(window as any).MSStream
+      );
+    }
     function handleResize() {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      const width = window.innerWidth;
+      const height = isIOS() ? window.screen.height : window.innerHeight;
+      setWindowSize({ width, height });
     }
     handleResize();
     window.addEventListener("resize", handleResize);
