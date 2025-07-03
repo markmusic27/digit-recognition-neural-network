@@ -73,7 +73,7 @@ export default function HomePage() {
             style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
           >
             <Board />
-            <div className="h-[60px]" />
+            <div className="h-[20px] md:h-[60px]" />
             <div
               className="flex justify-center transition-opacity duration-300"
               style={{ opacity: buttonVisible ? 1 : 0 }}

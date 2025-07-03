@@ -18,13 +18,14 @@ const Header = ({ windowWidth }: HeaderProps) => {
   return (
     <div className="flex flex-col items-center justify-center">
       <p
-        className="font-louize text-center font-[400] tracking-[0.3px] text-[#F5EEFF]"
+        className="font-louize text-center leading-tight font-[400] tracking-[0.3px] text-[#F5EEFF]"
         style={{ fontSize: getResponsiveHeaderSize(windowWidth) }}
       >
         Handwritten Digit Recognizer
       </p>
+      <div className="h-[0px] md:h-[14px]" />
       <div
-        className="group mt-[14px] flex flex-row items-center justify-center gap-[8px] hover:cursor-pointer"
+        className="group flex flex-row items-center justify-center gap-[8px] hover:cursor-pointer"
         style={{ transform: `scale(${getResponsiveTextScale(windowWidth)})` }}
         onClick={() => {
           window.open(
