@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Board from "~/components/Board";
 import MathPreview from "~/components/MathPreview";
 import Blur from "~/components/Blur";
@@ -29,6 +28,14 @@ export default function HomePage() {
     const buttonTimer = setTimeout(() => {
       setButtonVisible(true);
     }, 650);
+
+    setTimeout(() => {
+      window.scrollBy({
+        top: 1,
+        left: 0,
+        behavior: "smooth",
+      });
+    }, 5);
 
     return () => {
       clearTimeout(headerTimer);
