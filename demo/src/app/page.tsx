@@ -91,6 +91,14 @@ export default function HomePage() {
                 text={boardIsClear ? "Draw Digit" : "Predict Digit"}
                 icon="􀆿"
               />
+              <CustomButton
+                onClick={() => {
+                  // TODO: Run neural network
+                  console.log("Clear board");
+                }}
+                text="Clear"
+                secondary={true}
+              />
             </div>
           </div>
           <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />

@@ -28,21 +28,33 @@ interface CustomButtonProps {
   onClick?: () => void;
   text?: string;
   icon?: string;
+  secondary?: boolean;
 }
 
-const CustomButton = ({ onClick, text, icon }: CustomButtonProps) => {
+const CustomButton = ({
+  onClick,
+  text,
+  icon,
+  secondary = false,
+}: CustomButtonProps) => {
   return (
     <div className="rounded-[100px] bg-[#0000004d] p-[4px] outline-[1px] outline-[#ffffff4d] transition-all duration-300 hover:scale-[1.02] hover:cursor-pointer">
       <button
-        className="flex min-w-[100px] items-center gap-[10px] rounded-[100px] bg-white px-[20px] py-[12px] transition-all duration-200 hover:cursor-pointer"
+        className={`flex items-center gap-[10px] rounded-[100px] bg-[#ffffff${!secondary ? "e6" : "4d"}] px-[20px] py-[12px] transition-all duration-200 hover:cursor-pointer`}
         style={{
           transitionProperty:
             "width,background,color,border,box-shadow,opacity",
         }}
         onClick={onClick}
       >
-        <p className="font-sf text-[18px] font-[400] text-[#1A1A1A]">{icon}</p>
-        <p className="font-sf mb-[2px] text-[16px] font-[400] text-[#1A1A1A]">
+        {icon == undefined ? null : (
+          <p className="font-sf text-[18px] font-[400] text-[#1A1A1A]">
+            {icon}
+          </p>
+        )}
+        <p
+          className={`font-sf mb-[2px] text-[16px] font-[400] text-[${!secondary ? "#1A1A1A" : "#F6F6F6"}]`}
+        >
           <AnimatedText text={text ?? ""} />
         </p>
       </button>
