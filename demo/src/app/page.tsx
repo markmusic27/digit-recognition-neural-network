@@ -88,7 +88,7 @@ export default function HomePage() {
                   // TODO: Run neural network
                   console.log("RUN NEURAL NETWORK");
                 }}
-                text="Draw Digit"
+                text={boardIsClear ? "Draw Digit" : "Predict Digit"}
                 icon="􀆿"
               />
             </div>
