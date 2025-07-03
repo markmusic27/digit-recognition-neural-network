@@ -5,10 +5,12 @@ import Board from "~/components/Board";
 import MathPreview from "~/components/MathPreview";
 import Blur from "~/components/Blur";
 import Header from "~/components/Header";
+import CustomButton from "~/components/CustomButton";
 
 export default function HomePage() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [headerVisible, setHeaderVisible] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -20,11 +22,18 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const headerTimer = setTimeout(() => {
       setHeaderVisible(true);
     }, 200);
 
-    return () => clearTimeout(timer);
+    const buttonTimer = setTimeout(() => {
+      setButtonVisible(true);
+    }, 650);
+
+    return () => {
+      clearTimeout(headerTimer);
+      clearTimeout(buttonTimer);
+    };
   }, []);
 
   function calcMarginHeader(height: number) {
@@ -40,6 +49,10 @@ export default function HomePage() {
   }
 
   function calcMarginBoard(height: number) {
+    return 0.5 * height - 146;
+  }
+
+  function calcMarginButton(height: number) {
     return 0.5 * height - 146;
   }
 
@@ -60,6 +73,13 @@ export default function HomePage() {
             style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
           >
             <Board />
+            <div className="h-[60px]" />
+            <div
+              className="flex justify-center transition-opacity duration-300"
+              style={{ opacity: buttonVisible ? 1 : 0 }}
+            >
+              <CustomButton onClick={() => {}} text="Hello World" />
+            </div>
           </div>
           <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />
           <Blur
@@ -72,11 +92,7 @@ export default function HomePage() {
             zIndex={2}
             top={calcMarginBoard(windowSize.height)}
           />
-          <Blur
-            blur={700}
-            zIndex={3}
-            top={calcMarginBoard(windowSize.height)}
-          />
+
           <div
             className="absolute z-[0] w-full px-[30px] transition-opacity duration-300"
             style={{

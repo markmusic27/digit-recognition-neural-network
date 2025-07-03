@@ -17,18 +17,21 @@ const Blur = ({ blur = 0, zIndex = 0, opacity = 1, top = 0 }: BlurProps) => {
       <img
         src="/images/color.webp"
         className="h-[280px] w-[280px]"
-        style={{ filter: `blur(${blur}px)` }}
+        style={{
+          filter: `blur(${blur}px)`,
+          animation: `scaleAnimation 5s ease-in-out infinite`,
+        }}
       />
       <style jsx>{`
         @keyframes scaleAnimation {
           0% {
-            transform: scale(0.9);
+            transform: scale(0.95);
           }
           50% {
             transform: scale(1);
           }
           100% {
-            transform: scale(0.9);
+            transform: scale(0.95);
           }
         }
       `}</style>

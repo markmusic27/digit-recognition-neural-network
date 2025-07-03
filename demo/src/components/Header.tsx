@@ -24,7 +24,7 @@ const Header = ({ windowWidth }: HeaderProps) => {
         Handwritten Digit Recognizer
       </p>
       <div
-        className="group mt-[14px] flex flex-row items-center justify-center gap-[6px] hover:cursor-pointer"
+        className="group mt-[14px] flex flex-row items-center justify-center gap-[8px] hover:cursor-pointer"
         style={{ transform: `scale(${getResponsiveTextScale(windowWidth)})` }}
         onClick={() => {
           window.open(
@@ -32,14 +32,12 @@ const Header = ({ windowWidth }: HeaderProps) => {
           );
         }}
       >
-        <p className="font-sf mb-[8px] text-[24px] font-[300] text-[#998AAA]">
-          By
-        </p>
+        <p className="font-sf text-[24px] font-[300] text-[#998AAA]">By</p>
         <img
           src="/images/pfp.webp"
-          className="h-[27px] w-[27px] transition-transform duration-300 group-hover:-rotate-[-15deg]"
+          className="h-[27px] w-[27px] transition-transform duration-300 group-hover:-rotate-[-20deg]"
         />
-        <p className="font-sf mb-[8px] text-[24px] font-[300] text-[#998AAA]">
+        <p className="font-sf text-[24px] font-[300] text-[#998AAA]">
           Mark Music
         </p>
       </div>
