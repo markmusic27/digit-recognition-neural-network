@@ -13,21 +13,59 @@ export default function HomePage() {
   const [buttonVisible, setButtonVisible] = useState(false);
 
   useEffect(() => {
-    function isIOS() {
-      return (
-        typeof window !== "undefined" &&
-        /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-        !("MSStream" in window)
-      );
-    }
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
     function handleResize() {
-      const width = window.innerWidth;
-      const height = isIOS() ? window.screen.height : window.innerHeight;
-      setWindowSize({ width, height });
+      if (isIOS && window.visualViewport) {
+        setWindowSize({
+          width: window.visualViewport.width,
+          height: window.visualViewport.height,
+        });
+      } else {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      }
     }
+
+    function handleVisualViewportChange() {
+      if (isIOS && window.visualViewport) {
+        setWindowSize({
+          width: window.visualViewport.width,
+          height: window.visualViewport.height,
+        });
+      }
+    }
+
     handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    // Add appropriate event listeners based on platform
+    if (isIOS && window.visualViewport) {
+      window.visualViewport.addEventListener(
+        "resize",
+        handleVisualViewportChange,
+      );
+      window.visualViewport.addEventListener(
+        "scroll",
+        handleVisualViewportChange,
+      );
+    } else {
+      window.addEventListener("resize", handleResize);
+    }
+
+    return () => {
+      if (isIOS && window.visualViewport) {
+        window.visualViewport.removeEventListener(
+          "resize",
+          handleVisualViewportChange,
+        );
+        window.visualViewport.removeEventListener(
+          "scroll",
+          handleVisualViewportChange,
+        );
+      } else {
+        window.removeEventListener("resize", handleResize);
+      }
+    };
   }, []);
 
   useEffect(() => {
