@@ -37,7 +37,6 @@ const MathPreview = () => {
   };
 
   return (
-    // Arbitrary height to make the page scrollable TODO: change to dynamic height later
     <div className={`max-w-[1200px] ${padding}`}>
       <div className="flex flex-col gap-[18px]">
         <button
@@ -46,7 +45,7 @@ const MathPreview = () => {
           type="button"
         >
           <p className="font-sf text-[14px] font-[400] tracking-[0.3px] text-[#333333] transition-all duration-200 hover:text-[#585858]">
-            􀄩 Scroll to explore
+            􀄩 Scroll to view the math
           </p>
         </button>
         <Docs />
