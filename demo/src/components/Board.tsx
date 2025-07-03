@@ -1,11 +1,28 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
 const BRUSH_RADIUS = 1; // in pixels
 const BRUSH_STRENGTH = 0.3; // Increment per stroke
 
-const Board = () => {
+export type BoardHandle = {
+  getActivations: () => number[][];
+  clearBoard: () => void;
+  isBoardClear: () => boolean;
+};
+
+type BoardProps = {
+  onDraw?: (pixels: number[][]) => void;
+};
+
+const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
   // Use number (0-1) for activation
   const [pixels, setPixels] = useState<number[][]>(
@@ -17,6 +34,17 @@ const Board = () => {
   const [cursorInside, setCursorInside] = useState(false);
   const boardRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+
+  // Expose methods to parent
+  useImperativeHandle(
+    ref,
+    () => ({
+      getActivations: () => pixels,
+      clearBoard,
+      isBoardClear,
+    }),
+    [pixels],
+  );
 
   const getPixelCoordinates = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -36,30 +64,40 @@ const Board = () => {
   );
 
   // Soft, thick brush: increment pixel and neighbors in a circular area
-  const drawPixel = useCallback((centerX: number, centerY: number) => {
-    setPixels((prev) => {
-      const newPixels = prev.map((row) => [...row]);
-      for (let dy = -BRUSH_RADIUS; dy <= BRUSH_RADIUS; dy++) {
-        for (let dx = -BRUSH_RADIUS; dx <= BRUSH_RADIUS; dx++) {
-          const x = centerX + dx;
-          const y = centerY + dy;
-          // Check bounds and circular brush
-          if (
-            x >= 0 &&
-            x < 28 &&
-            y >= 0 &&
-            y < 28 &&
-            dx * dx + dy * dy <= BRUSH_RADIUS * BRUSH_RADIUS &&
-            newPixels[y] &&
-            typeof newPixels[y][x] === "number"
-          ) {
-            newPixels[y][x] = Math.min(1, newPixels[y][x] + BRUSH_STRENGTH);
+  const drawPixel = useCallback(
+    (centerX: number, centerY: number) => {
+      setPixels((prev) => {
+        const newPixels = prev.map((row) => [...row]);
+        let changed = false;
+        for (let dy = -BRUSH_RADIUS; dy <= BRUSH_RADIUS; dy++) {
+          for (let dx = -BRUSH_RADIUS; dx <= BRUSH_RADIUS; dx++) {
+            const x = centerX + dx;
+            const y = centerY + dy;
+            // Check bounds and circular brush
+            if (
+              x >= 0 &&
+              x < 28 &&
+              y >= 0 &&
+              y < 28 &&
+              dx * dx + dy * dy <= BRUSH_RADIUS * BRUSH_RADIUS &&
+              newPixels[y] &&
+              typeof newPixels[y][x] === "number"
+            ) {
+              const before = newPixels[y][x];
+              newPixels[y][x] = Math.min(1, newPixels[y][x] + BRUSH_STRENGTH);
+              if (newPixels[y][x] !== before) changed = true;
+            }
           }
         }
-      }
-      return newPixels;
-    });
-  }, []);
+        // Only call onDraw if something changed
+        if (changed && onDraw) {
+          setTimeout(() => onDraw(newPixels.map((row) => [...row])), 0);
+        }
+        return newPixels;
+      });
+    },
+    [onDraw],
+  );
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -110,7 +148,18 @@ const Board = () => {
         .fill(null)
         .map(() => Array(28).fill(0)),
     );
-  }, []);
+    if (onDraw) {
+      setTimeout(
+        () =>
+          onDraw(
+            Array(28)
+              .fill(null)
+              .map(() => Array(28).fill(0)),
+          ),
+        0,
+      );
+    }
+  }, [onDraw]);
 
   // Returns true if all pixels are 0
   const isBoardClear = useCallback(() => {
@@ -231,6 +280,6 @@ const Board = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Board;

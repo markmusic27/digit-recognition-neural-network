@@ -1,7 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Board from "~/components/Board";
+import type { BoardHandle } from "~/components/Board";
 import MathPreview from "~/components/MathPreview";
 import Blur from "~/components/Blur";
 import Header from "~/components/Header";
@@ -11,6 +12,8 @@ export default function HomePage() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [headerVisible, setHeaderVisible] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [boardIsClear, setBoardIsClear] = useState(true);
+  const boardRef = useRef<BoardHandle>(null);
 
   useEffect(() => {
     function handleResize() {
@@ -56,6 +59,13 @@ export default function HomePage() {
     return 0.5 * height - 146;
   }
 
+  // Handler for board changes
+  const handleBoardDraw = (pixels: number[][]) => {
+    if (boardRef.current) {
+      setBoardIsClear(boardRef.current.isBoardClear());
+    }
+  };
+
   return (
     <main className="bg-black">
       <div className="flex w-full flex-col">
@@ -64,8 +74,11 @@ export default function HomePage() {
             className="absolute left-1/2 z-5 -translate-x-1/2 transition-all duration-600"
             style={{ top: `${calcMarginBoard(windowSize.height)}px` }}
           >
-            <Board />
-            <div className="h-[20px] md:h-[60px]" />
+            {/* Board and controls */}
+            <div className="flex flex-col items-center gap-2">
+              <Board ref={boardRef} onDraw={handleBoardDraw} />
+              <div className="h-[20px] md:h-[60px]" />
+            </div>
             <div
               className="flex justify-center transition-opacity duration-300"
               style={{ opacity: buttonVisible ? 1 : 0 }}
