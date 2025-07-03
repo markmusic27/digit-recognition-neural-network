@@ -8,14 +8,30 @@ interface BlurProps {
 const Blur = ({ blur = 0, zIndex = 0, opacity = 1, top = 0 }: BlurProps) => {
   return (
     <div
-      className={`absolute left-1/2 z-[${zIndex}] -translate-x-1/2 opacity-[0.7] transition-all duration-600 md:opacity-[1]`}
-      style={{ top: `${top}px` }}
+      className={`absolute left-1/2 z-[${zIndex}] -translate-x-1/2 animate-pulse opacity-[0.7] transition-all duration-600 md:opacity-[1]`}
+      style={{
+        top: `${top}px`,
+        animation: "scaleAnimation 3s ease-in-out infinite",
+      }}
     >
       <img
         src="/images/color.webp"
         className="h-[280px] w-[280px]"
         style={{ filter: `blur(${blur}px)` }}
       />
+      <style jsx>{`
+        @keyframes scaleAnimation {
+          0% {
+            transform: scale(0.9);
+          }
+          50% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(0.9);
+          }
+        }
+      `}</style>
     </div>
   );
 };

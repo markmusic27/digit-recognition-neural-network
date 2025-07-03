@@ -32,7 +32,9 @@ export default function HomePage() {
 
     spacing = spacing > 15 ? spacing : 15;
 
-    console.log();
+    if (height < 1000) {
+      return 0.35 * height + (146 + spacing);
+    }
 
     return 0.4 * height + (146 + spacing);
   }

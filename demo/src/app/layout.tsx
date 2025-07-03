@@ -10,12 +10,28 @@ export const metadata: Metadata = {
 };
 
 const louize = localFont({
-  src: "../../public/fonts/louize.otf",
+  src: [
+    {
+      path: "../../public/fonts/louize-regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/louize-medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+  ],
   variable: "--font-louize",
 });
 
 const sf = localFont({
   src: [
+    {
+      path: "../../public/fonts/sf-thin.otf",
+      weight: "300",
+      style: "normal",
+    },
     {
       path: "../../public/fonts/sf-regular.otf",
       weight: "400",
