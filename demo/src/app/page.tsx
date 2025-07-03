@@ -15,8 +15,8 @@ export default function HomePage() {
   useEffect(() => {
     function handleResize() {
       setWindowSize({
-        width: window.visualViewport?.width || window.innerWidth,
-        height: window.visualViewport?.height || window.innerHeight,
+        width: window.visualViewport?.width ?? window.innerWidth,
+        height: window.visualViewport?.height ?? window.innerHeight,
       });
     }
     handleResize();
