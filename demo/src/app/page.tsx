@@ -92,7 +92,7 @@ export default function HomePage() {
                 icon="􀆿"
               />
               <div
-                className={`transition-opacity duration-300 ${
+                className={`transition-opacity duration-500 ${
                   boardIsClear ? "pointer-events-none opacity-0" : "opacity-100"
                 }`}
               >

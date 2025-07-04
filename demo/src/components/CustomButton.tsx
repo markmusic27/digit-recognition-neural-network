@@ -40,8 +40,9 @@ const CustomButton = ({
   return (
     <div className="rounded-[100px] bg-[#0000004d] p-[4px] outline-[1px] outline-[#ffffff4d] transition-all duration-300 hover:scale-[1.02] hover:cursor-pointer">
       <button
-        className={`flex items-center gap-[10px] rounded-[100px] bg-[#ffffff${!secondary ? "e6" : "4d"}] px-[20px] py-[12px] transition-all duration-200 hover:cursor-pointer`}
+        className={`flex items-center gap-[10px] rounded-[100px] px-[20px] py-[12px] transition-all duration-200 hover:cursor-pointer`}
         style={{
+          backgroundColor: !secondary ? "#ffffffe6" : "#ffffff33",
           transitionProperty:
             "width,background,color,border,box-shadow,opacity",
         }}
