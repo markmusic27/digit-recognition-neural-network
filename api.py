@@ -46,7 +46,9 @@ class PredictionRequest(BaseModel):
 
 class PredictionResponse(BaseModel):
     predicted_digit: int
-    confidence_scores: List[float]  # Raw output probabilities for all 10 digits
+    h1: List[float]  # Activations for hidden layer 1 (16 elements)
+    h2: List[float]  # Activations for hidden layer 2 (16 elements)
+    o: List[float]   # Activations for output layer (10 elements)
 
 async def verify_api_key(request: Request):
     api_key = request.headers.get("X-API-Key")
@@ -78,16 +80,41 @@ async def predict_digit(request: PredictionRequest):
         # Convert to numpy array and reshape for model
         pixels = np.array(request.pixels).reshape(-1, 1)
         
-        # Get raw output from model (before argmax)
-        raw_output = model.forward(pixels)
-        confidence_scores = raw_output.flatten().tolist()
+        # Manually run forward pass to capture intermediate activations
+        current_x = pixels
+        
+        # Get h1 (first hidden layer activations)
+        h1_layer = model.layers[0]
+        h1 = h1_layer.forward(current_x)
+        current_x = h1
+        
+        # Get h2 (second hidden layer activations)
+        h2_layer = model.layers[1]
+        h2 = h2_layer.forward(current_x)
+        current_x = h2
+        
+        # Get o (output layer activations)
+        o_layer = model.layers[2]
+        o = o_layer.forward(current_x)
         
         # Get prediction
-        predicted_digit = model.predict(pixels)
+        predicted_digit = np.argmax(o)
+        
+        # Convert to lists and set small values to 0
+        h1_list = h1.flatten().tolist()
+        h2_list = h2.flatten().tolist()
+        o_list = o.flatten().tolist()
+        
+        # Set activations less than 0.001 to 0 and round to 4 decimal places
+        h1_list = [0 if abs(val) < 0.001 else round(val, 4) for val in h1_list]
+        h2_list = [0 if abs(val) < 0.001 else round(val, 4) for val in h2_list]
+        o_list = [0 if abs(val) < 0.001 else round(val, 4) for val in o_list]
         
         return PredictionResponse(
             predicted_digit=int(predicted_digit),
-            confidence_scores=confidence_scores
+            h1=h1_list,
+            h2=h2_list,
+            o=o_list
         )
         
     except Exception as e:

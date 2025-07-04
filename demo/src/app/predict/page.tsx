@@ -1,3 +1,14 @@
+"use client";
+
+import Network from "~/components/Network";
+import { useActivationsStore } from "~/store/activations";
+
 export default function PredictPage() {
-  return <div>Predict Page</div>;
+  const { activations } = useActivationsStore();
+
+  return (
+    <div className="">
+      <Network width={300} />
+    </div>
+  );
 }

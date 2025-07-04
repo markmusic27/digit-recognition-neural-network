@@ -10,7 +10,7 @@ import React, {
 } from "react";
 
 const BRUSH_RADIUS = 1; // in pixels
-const BRUSH_STRENGTH = 0.3; // Increment per stroke
+const BRUSH_STRENGTH = 0.4; // Increment per stroke
 
 export type BoardHandle = {
   getActivations: () => number[][];
