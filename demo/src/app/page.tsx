@@ -1,11 +1,13 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Board from "~/components/Board";
 import type { BoardHandle } from "~/components/Board";
 import MathPreview from "~/components/MathPreview";
 import Blur from "~/components/Blur";
+import { useActivationsStore } from "~/store/activations";
 import Header from "~/components/Header";
+import { useRouter } from "next/navigation";
 import CustomButton from "~/components/CustomButton";
 
 export default function HomePage() {
@@ -14,6 +16,8 @@ export default function HomePage() {
   const [buttonVisible, setButtonVisible] = useState(false);
   const [boardIsClear, setBoardIsClear] = useState(true);
   const boardRef = useRef<BoardHandle>(null);
+  const router = useRouter();
+  const { setActivations } = useActivationsStore();
 
   useEffect(() => {
     function handleResize() {
@@ -64,6 +68,8 @@ export default function HomePage() {
     if (boardRef.current) {
       setBoardIsClear(boardRef.current.isBoardClear());
     }
+
+    setActivations(pixels.flat());
   };
 
   return (
@@ -85,8 +91,12 @@ export default function HomePage() {
             >
               <CustomButton
                 onClick={() => {
-                  // TODO: Run neural network
-                  console.log("RUN NEURAL NETWORK");
+                  if (!boardIsClear) {
+                    router.push("/predict");
+                    return;
+                  }
+
+                  // Handle case where board is clear
                 }}
                 text={boardIsClear ? "Draw Digit" : "Predict Digit"}
                 icon="􀆿"
