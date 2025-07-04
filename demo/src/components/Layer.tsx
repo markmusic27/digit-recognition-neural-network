@@ -1,12 +1,17 @@
 import { useActivationsStore } from "~/store/activations";
+import Dots from "./Dots";
 
 interface LayerProps {
   neurons: number[];
   layer: number;
+  isInput?: boolean;
+  isOutput?: boolean;
 }
 
 interface NeuronProps {
   activation: number;
+  isOutput?: boolean;
+  index: number;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
@@ -17,37 +22,66 @@ const getBackgroundColor = (activation: number) => {
   return `rgba(255, 255, 255, ${activation})`;
 };
 
-const Neuron = ({ activation, onMouseEnter, onMouseLeave }: NeuronProps) => {
+const Neuron = ({
+  activation,
+  onMouseEnter,
+  onMouseLeave,
+  index,
+  isOutput = false,
+}: NeuronProps) => {
   return (
-    <div
-      className="h-[35px] w-[35px] rounded-full border-[1.5px] border-white transition-all duration-300 hover:scale-[1.05]"
-      style={{ backgroundColor: getBackgroundColor(activation) }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0px 0px 10px 0px #949494";
-        onMouseEnter();
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "none";
-        onMouseLeave();
-      }}
-    ></div>
+    <div className="flex flex-row items-center">
+      <div
+        className="h-[40px] w-[40px] rounded-full border-[1.5px] border-white transition-all duration-300 hover:scale-[1.05]"
+        style={{ backgroundColor: getBackgroundColor(activation) }}
+        onMouseEnter={(e) => {
+          onMouseEnter();
+        }}
+        onMouseLeave={(e) => {
+          onMouseLeave();
+        }}
+      ></div>
+      {isOutput ? (
+        <p className="font-louize ml-[20px] text-[30px]">{index}</p>
+      ) : null}
+    </div>
   );
 };
 
-const Layer = ({ neurons, layer }: LayerProps) => {
+const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
   const { setHoveredActivation, resetHoveredActivation } =
     useActivationsStore();
 
   return (
     <div className="flex flex-col gap-[10px]">
-      {neurons.map((act, i) => (
-        <Neuron
-          activation={act}
-          key={i}
-          onMouseEnter={() => setHoveredActivation(layer, i)}
-          onMouseLeave={() => resetHoveredActivation()}
-        />
-      ))}
+      {neurons.map((act, i) => {
+        if (isInput && i === Math.floor(neurons.length / 2)) {
+          return (
+            <div>
+              <Neuron
+                activation={act}
+                key={i}
+                index={i}
+                onMouseEnter={() => setHoveredActivation(layer, i)}
+                onMouseLeave={() => resetHoveredActivation()}
+              />
+              <div className="h-[10px]" />
+              <Dots />
+            </div>
+          );
+        }
+
+        return (
+          <Neuron
+            activation={act}
+            key={i}
+            index={i}
+            isOutput={isOutput}
+            onMouseEnter={() => setHoveredActivation(layer, i)}
+            onMouseLeave={() => resetHoveredActivation()}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -8,9 +8,10 @@ const Network = (props: NetworkProps) => {
   const originalSize = 710;
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="w-[] flex items-center justify-center gap-[180px]">
       <Layer
         layer={0}
+        isInput={true}
         neurons={Array.from({ length: 16 }, () => Math.random())}
       />
       <Layer
@@ -23,6 +24,7 @@ const Network = (props: NetworkProps) => {
       />
       <Layer
         layer={0}
+        isOutput={true}
         neurons={Array.from({ length: 10 }, () => Math.random())}
       />
     </div>
