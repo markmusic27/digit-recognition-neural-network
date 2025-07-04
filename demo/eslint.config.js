@@ -19,6 +19,8 @@ export default tseslint.config(
     ],
     rules: {
       "@typescript-eslint/array-type": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      '@typescript-eslint/no-unsafe-return': 'off',
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/consistent-type-imports": [
         "warn",

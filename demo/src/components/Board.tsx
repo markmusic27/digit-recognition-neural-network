@@ -24,16 +24,29 @@ type BoardProps = {
 
 const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
-  // Use number (0-1) for activation
   const [pixels, setPixels] = useState<number[][]>(
-    Array(28)
-      .fill(null)
-      .map(() => Array(28).fill(0)),
+    Array.from({ length: 28 }, () => Array(28).fill(0)),
   );
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [cursorInside, setCursorInside] = useState(false);
   const boardRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+
+  // Returns true if all pixels are 0
+  const isBoardClear = useCallback(() => {
+    return pixels.every((row) => row.every((pixel) => pixel === 0));
+  }, [pixels]);
+
+  // Clear board function
+  const clearBoard = useCallback(() => {
+    setPixels(Array.from({ length: 28 }, () => Array(28).fill(0)));
+    if (onDraw) {
+      setTimeout(
+        () => onDraw(Array.from({ length: 28 }, () => Array(28).fill(0))),
+        0,
+      );
+    }
+  }, [onDraw]);
 
   // Expose methods to parent
   useImperativeHandle(
@@ -43,18 +56,33 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
       clearBoard,
       isBoardClear,
     }),
-    [pixels],
+    [pixels, clearBoard, isBoardClear],
   );
 
+  // Helper to get pixel coordinates from a mouse event
   const getPixelCoordinates = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!boardRef.current) return null;
-
       const rect = boardRef.current.getBoundingClientRect();
       const x = Math.floor((e.clientX - rect.left) / 10);
       const y = Math.floor((e.clientY - rect.top) / 10);
+      if (x >= 0 && x < 28 && y >= 0 && y < 28) {
+        return { x, y };
+      }
+      return null;
+    },
+    [],
+  );
 
-      // Ensure coordinates are within bounds
+  // Helper to get pixel coordinates from a touch event
+  const getTouchPixelCoordinates = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      if (!boardRef.current) return null;
+      const rect = boardRef.current.getBoundingClientRect();
+      const touch = e.touches[0] ?? e.changedTouches[0];
+      if (!touch) return null;
+      const x = Math.floor((touch.clientX - rect.left) / 10);
+      const y = Math.floor((touch.clientY - rect.top) / 10);
       if (x >= 0 && x < 28 && y >= 0 && y < 28) {
         return { x, y };
       }
@@ -73,7 +101,6 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
           for (let dx = -BRUSH_RADIUS; dx <= BRUSH_RADIUS; dx++) {
             const x = centerX + dx;
             const y = centerY + dy;
-            // Check bounds and circular brush
             if (
               x >= 0 &&
               x < 28 &&
@@ -113,13 +140,10 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!boardRef.current) return;
-
       const rect = boardRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-
       setCursorPosition({ x, y });
-
       if (!isDrawing) return;
       const coords = getPixelCoordinates(e);
       if (coords) {
@@ -142,48 +166,7 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
     setCursorInside(true);
   }, []);
 
-  const clearBoard = useCallback(() => {
-    setPixels(
-      Array(28)
-        .fill(null)
-        .map(() => Array(28).fill(0)),
-    );
-    if (onDraw) {
-      setTimeout(
-        () =>
-          onDraw(
-            Array(28)
-              .fill(null)
-              .map(() => Array(28).fill(0)),
-          ),
-        0,
-      );
-    }
-  }, [onDraw]);
-
-  // Returns true if all pixels are 0
-  const isBoardClear = useCallback(() => {
-    return pixels.every((row) => row.every((pixel) => pixel === 0));
-  }, [pixels]);
-
-  // Helper to get pixel coordinates from a touch event
-  const getTouchPixelCoordinates = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      if (!boardRef.current) return null;
-      const rect = boardRef.current.getBoundingClientRect();
-      const touch = e.touches[0] || e.changedTouches[0];
-      if (!touch) return null;
-      const x = Math.floor((touch.clientX - rect.left) / 10);
-      const y = Math.floor((touch.clientY - rect.top) / 10);
-      if (x >= 0 && x < 28 && y >= 0 && y < 28) {
-        return { x, y };
-      }
-      return null;
-    },
-    [],
-  );
-
-  // Prevent scrolling on mobile and enable drawing
+  // Touch events
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -213,12 +196,11 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
     setIsDrawing(false);
   }, []);
 
-  // Lock body scroll when drawing
+  // Lock body scroll when drawing, and prevent touchmove globally
   useEffect(() => {
     if (isDrawing) {
       const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      // Prevent touchmove globally
       const preventTouchMove = (e: TouchEvent) => {
         e.preventDefault();
       };
@@ -263,7 +245,6 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
             )),
           )}
         </div>
-
         {/* Custom cursor (thicker) */}
         <div
           ref={cursorRef}
@@ -281,5 +262,7 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
     </div>
   );
 });
+
+Board.displayName = "Board";
 
 export default Board;
