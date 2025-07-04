@@ -5,6 +5,9 @@ interface ActivationsState {
   activations: number[];
   setActivations: (a: number[]) => void;
   resetActivations: () => void;
+  hoveredActivation: [number, number] | null;
+  setHoveredActivation: (layer: number, index: number) => void;
+  resetHoveredActivation: () => void;
 }
 
 export const useActivationsStore = create<ActivationsState>()(
@@ -15,6 +18,11 @@ export const useActivationsStore = create<ActivationsState>()(
         set({ activations: a } as ActivationsState),
       resetActivations: () =>
         set({ activations: Array(784).fill(0) } as ActivationsState),
+      hoveredActivation: null,
+      setHoveredActivation: (layer: number, index: number) =>
+        set({ hoveredActivation: [layer, index] } as Partial<ActivationsState>),
+      resetHoveredActivation: () =>
+        set({ hoveredActivation: null } as Partial<ActivationsState>),
     }),
     { name: "activations-storage" },
   ),
