@@ -26,6 +26,7 @@ export default function PredictPage() {
   } = useActivationsStore();
   const [loaded, setLoaded] = useState(false);
   const [screenWidth, setScreenWidth] = useState(0);
+  const [showHUD, setShowHud] = useState(false);
   const router = useRouter();
 
   // Screen width state
@@ -76,8 +77,17 @@ export default function PredictPage() {
       () => {
         // STEP 5
         setWeights([0, 1, 1]);
+        setShowHud(true);
       },
       500 + ANIMATION_DURATION * 4 + 200,
+    );
+    setTimeout(
+      () => {
+        // STEP 5
+        setWeights([0, 1, 1]);
+        setShowHud(false);
+      },
+      500 + ANIMATION_DURATION * 10 + 200,
     );
   }
 
@@ -116,13 +126,23 @@ export default function PredictPage() {
     >
       <div className="relative h-screen w-screen">
         {/* Other Inidcators */}
-        <div className="absolute bottom-[42px] left-1/2 z-[201] -translate-x-1/2 md:bottom-[60px]">
+        <div className="absolute bottom-[4%] left-1/2 z-[201] -translate-x-1/2">
           <CustomButton
             text="Predict Another"
             icon="􀆉"
             iconSize={14}
             onClick={router.back}
           />
+        </div>
+
+        <div
+          className={`absolute top-[3%] left-1/2 z-[201] -translate-x-1/2 transition-opacity duration-400 ${
+            showHUD || hoveredActivation != undefined
+              ? "opacity-100"
+              : "opacity-0"
+          }`}
+        >
+          <div className="h-[50px] w-[200px] bg-amber-400"></div>
         </div>
 
         {/* Network */}
