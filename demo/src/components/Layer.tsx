@@ -57,7 +57,7 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
       {neurons.map((act, i) => {
         if (isInput && i === Math.floor(neurons.length / 2)) {
           return (
-            <div>
+            <div key={i}>
               <Neuron
                 activation={act}
                 key={i}
