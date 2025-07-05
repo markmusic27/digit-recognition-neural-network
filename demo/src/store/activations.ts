@@ -1,6 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface NeuronDisplay {
+  x: number;
+  y: number;
+  layer: number;
+  index: number;
+  activation: number;
+}
+
 interface ActivationsState {
   activations: number[];
   setActivations: (a: number[]) => void;
@@ -13,11 +21,16 @@ interface ActivationsState {
   hoveredActivation: [number, number] | null;
   setHoveredActivation: (layer: number, index: number) => void;
   resetHoveredActivation: () => void;
+  // Neuron position tracking
+  neuronPositions: Record<string, NeuronDisplay>;
+  addNeuronPosition: (neuron: NeuronDisplay) => void;
+  removeNeuronPositions: (layer: number) => void;
+  clearAllNeuronPositions: () => void;
 }
 
 export const useActivationsStore = create<ActivationsState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       activations: Array(784).fill(0),
       setActivations: (a: number[]) =>
         set({ activations: a } as ActivationsState),
@@ -32,6 +45,28 @@ export const useActivationsStore = create<ActivationsState>()(
         set({ hoveredActivation: [layer, index] } as Partial<ActivationsState>),
       resetHoveredActivation: () =>
         set({ hoveredActivation: null } as Partial<ActivationsState>),
+      // Neuron position tracking
+      neuronPositions: {},
+      addNeuronPosition: (neuron: NeuronDisplay) => {
+        const key = `${neuron.layer}-${neuron.index}`;
+        set((state) => ({
+          neuronPositions: { ...state.neuronPositions, [key]: neuron },
+        }));
+      },
+      removeNeuronPositions: (layer: number) => {
+        set((state) => {
+          const newObj = { ...state.neuronPositions };
+          for (const key of Object.keys(newObj)) {
+            if (key.startsWith(`${layer}-`)) {
+              delete newObj[key];
+            }
+          }
+          return { neuronPositions: newObj };
+        });
+      },
+      clearAllNeuronPositions: () => {
+        set({ neuronPositions: {} });
+      },
     }),
     { name: "activations-storage" },
   ),

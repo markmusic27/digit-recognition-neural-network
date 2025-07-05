@@ -1,5 +1,6 @@
 import { useActivationsStore } from "~/store/activations";
 import Dots from "./Dots";
+import { useEffect, useRef } from "react";
 
 interface LayerProps {
   neurons: number[];
@@ -8,12 +9,22 @@ interface LayerProps {
   isOutput?: boolean;
 }
 
+interface NeuronDisplay {
+  x: number;
+  y: number;
+  layer: number;
+  index: number;
+  activation: number;
+}
+
 interface NeuronProps {
   activation: number;
   isOutput?: boolean;
   index: number;
+  layer: number;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  neuronRef: (el: HTMLDivElement | null) => void;
 }
 
 const getBackgroundColor = (activation: number) => {
@@ -27,11 +38,14 @@ const Neuron = ({
   onMouseEnter,
   onMouseLeave,
   index,
+  layer,
   isOutput = false,
+  neuronRef,
 }: NeuronProps) => {
   return (
     <div className="flex flex-row items-center">
       <div
+        ref={neuronRef}
         className="h-[40px] w-[40px] rounded-full border-[1.5px] border-white transition-all duration-300 hover:scale-[1.05]"
         style={{ backgroundColor: getBackgroundColor(activation) }}
         onMouseEnter={(e) => {
@@ -49,8 +63,50 @@ const Neuron = ({
 };
 
 const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
-  const { setHoveredActivation, resetHoveredActivation } =
-    useActivationsStore();
+  const {
+    setHoveredActivation,
+    resetHoveredActivation,
+    addNeuronPosition,
+    removeNeuronPositions,
+  } = useActivationsStore();
+
+  const neuronRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Function to update neuron positions
+  const updateNeuronPositions = () => {
+    neurons.forEach((activation, index) => {
+      const element = neuronRefs.current[index];
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const neuron: NeuronDisplay = {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+          layer,
+          index,
+          activation,
+        };
+        addNeuronPosition(neuron);
+      }
+    });
+  };
+
+  // Update positions when neurons change or component mounts
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(updateNeuronPositions, 0);
+    return () => clearTimeout(timer);
+  }, [neurons, layer]);
+
+  // Cleanup when component unmounts
+  useEffect(() => {
+    return () => {
+      removeNeuronPositions(layer);
+    };
+  }, [layer, removeNeuronPositions]);
+
+  const setNeuronRef = (index: number) => (el: HTMLDivElement | null) => {
+    neuronRefs.current[index] = el;
+  };
 
   return (
     <div className="flex flex-col gap-[10px]">
@@ -63,8 +119,10 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
                 activation={act}
                 key={i}
                 index={i}
+                layer={layer}
                 onMouseEnter={() => setHoveredActivation(layer, i)}
                 onMouseLeave={() => resetHoveredActivation()}
+                neuronRef={setNeuronRef(i)}
               />
               <div className="h-[10px]" />
               <Dots />
@@ -77,9 +135,11 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
             activation={act}
             key={i}
             index={i}
+            layer={layer}
             isOutput={isOutput}
             onMouseEnter={() => setHoveredActivation(layer, i)}
             onMouseLeave={() => resetHoveredActivation()}
+            neuronRef={setNeuronRef(i)}
           />
         );
       })}

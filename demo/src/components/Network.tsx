@@ -23,9 +23,9 @@ const Network = (props: NetworkProps) => {
           isInput={true}
           neurons={formatActivations(activations)}
         />
-        <Layer layer={0} neurons={hidden1} />
-        <Layer layer={0} neurons={hidden2} />
-        <Layer layer={0} isOutput={true} neurons={output} />
+        <Layer layer={1} neurons={hidden1} />
+        <Layer layer={2} neurons={hidden2} />
+        <Layer layer={3} isOutput={true} neurons={output} />
       </div>
     </div>
   );
