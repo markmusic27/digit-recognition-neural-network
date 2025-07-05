@@ -6,7 +6,9 @@ import Network from "~/components/Network";
 import { useActivationsStore } from "~/store/activations";
 import type { PredictionData } from "~/types/prediction";
 import { env } from "~/env";
-import Weight from "~/components/Weight";
+import Weight, { type WeightConnection } from "~/components/Weight";
+
+const LAYERS = [16, 16, 16, 10];
 
 export default function PredictPage() {
   const {
@@ -19,6 +21,9 @@ export default function PredictPage() {
   } = useActivationsStore();
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
+
+  // Used to animate weights
+  const [weights, setWeights] = useState<number[]>([1, 1, 1]);
 
   useEffect(() => {
     setLoaded(false);
@@ -49,27 +54,50 @@ export default function PredictPage() {
     >
       <div className="relative h-screen w-screen">
         {/* Network */}
-        <div className="absolute top-1/2 left-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 left-1/2 z-[200] -translate-x-1/2 -translate-y-1/2">
           <Network width={300} />
         </div>
 
         {/* Weights */}
-        <Weight
-          x1={neuronPositions["0-3"]?.x!}
-          y1={neuronPositions["0-3"]?.y!}
-          x2={neuronPositions["1-1"]?.x!}
-          y2={neuronPositions["1-1"]?.y!}
-          activation={0.5}
-          z={0}
-        />
-        <Weight
-          x1={neuronPositions["1-1"]?.x!}
-          y1={neuronPositions["1-1"]?.y!}
-          x2={neuronPositions["2-1"]?.x!}
-          y2={neuronPositions["2-1"]?.y!}
-          activation={0.5}
-          z={0}
-        />
+        {neuronPositions === undefined
+          ? null
+          : Object.values(neuronPositions).map((neuron, ind) => {
+              if (neuron.layer === 3) {
+                // Output layer so no weight
+                return null;
+              }
+
+              let nA = neuron;
+              let proceedingLayer = neuron.layer + 1;
+
+              let connections: WeightConnection[] = [];
+
+              for (let i = 0; i < LAYERS[proceedingLayer]!; i++) {
+                let nB = neuronPositions[`${proceedingLayer}-${i}`];
+
+                let w: number =
+                  weights[neuron.layer] === undefined
+                    ? 1
+                    : weights[neuron.layer]!;
+
+                if (nB !== undefined) {
+                  connections.push({
+                    x: nB.x,
+                    y: nB.y,
+                    activation: nA.activation * nB.activation * w,
+                  });
+                }
+              }
+
+              return (
+                <Weight
+                  key={ind}
+                  x1={nA.x}
+                  y1={nA.y}
+                  connections={connections}
+                />
+              );
+            })}
       </div>
     </div>
   );
