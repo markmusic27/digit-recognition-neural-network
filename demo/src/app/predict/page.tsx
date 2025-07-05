@@ -10,6 +10,7 @@ import Weight, { type WeightConnection } from "~/components/Weight";
 import CustomButton from "~/components/CustomButton";
 
 const LAYERS = [16, 16, 16, 10];
+const ANIMATION_DURATION = 800;
 
 export default function PredictPage() {
   const {
@@ -19,12 +20,66 @@ export default function PredictPage() {
     setOutput,
     hoveredActivation,
     neuronPositions,
+    weights,
+    setWeights,
+    setNeuronWeights,
   } = useActivationsStore();
   const [loaded, setLoaded] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(0);
   const router = useRouter();
 
-  // Used to animate weights
-  const [weights, setWeights] = useState<number[]>([1, 1, 1]);
+  // Screen width state
+  useEffect(() => {
+    const updateScreenWidth = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    setWeights([0, 0, 0]);
+    setNeuronWeights([1, 0, 0, 0]);
+
+    // Set initial width
+    updateScreenWidth();
+
+    // Add event listener
+    window.addEventListener("resize", updateScreenWidth);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", updateScreenWidth);
+  }, []);
+
+  function animateIn() {
+    setTimeout(() => {
+      // STEP 1
+      setWeights([0.5, 0, 0]);
+      setNeuronWeights([1, 1, 0, 0]);
+    }, 500);
+    setTimeout(() => {
+      // STEP 2
+      setWeights([0, 1, 0]);
+      setNeuronWeights([1, 1, 1, 0]);
+    }, 500 + ANIMATION_DURATION);
+    setTimeout(
+      () => {
+        // STEP 3
+        setWeights([0, 0, 1]);
+        setNeuronWeights([1, 1, 1, 1]);
+      },
+      500 + ANIMATION_DURATION * 2,
+    );
+    setTimeout(
+      () => {
+        // STEP 4
+        setWeights([0, 0, 0]);
+      },
+      500 + ANIMATION_DURATION * 3,
+    );
+    setTimeout(
+      () => {
+        // STEP 5
+        setWeights([0, 1, 1]);
+      },
+      500 + ANIMATION_DURATION * 4 + 200,
+    );
+  }
 
   useEffect(() => {
     setLoaded(false);
@@ -43,8 +98,14 @@ export default function PredictPage() {
         setHidden2(data.h2);
         setOutput(data.o);
         setLoaded(true);
+
+        animateIn();
       })
-      .catch(() => setLoaded(true));
+      .catch(() => {
+        setLoaded(true);
+
+        animateIn();
+      });
   }, [activations, router]);
 
   return (
@@ -95,7 +156,8 @@ export default function PredictPage() {
                   connections.push({
                     x: nB.x,
                     y: nB.y,
-                    activation: nA.activation * nB.activation * w,
+                    activation:
+                      nA.layer === 0 ? w : nA.activation * nB.activation * w,
                   });
                 }
               }

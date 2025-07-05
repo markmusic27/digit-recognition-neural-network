@@ -27,9 +27,15 @@ interface NeuronProps {
   neuronRef: (el: HTMLDivElement | null) => void;
 }
 
-const getBackgroundColor = (activation: number) => {
+const getBackgroundColor = (
+  activation: number,
+  weights: number[],
+  layer: number,
+) => {
+  let w: number = weights[layer] === undefined ? 1 : weights[layer];
+
   // Blends black and white based on activation
-  const gray = Math.round(255 * activation);
+  const gray = Math.round(255 * activation * w);
   return `rgba(${gray}, ${gray}, ${gray}, 1)`;
 };
 
@@ -42,12 +48,17 @@ const Neuron = ({
   isOutput = false,
   neuronRef,
 }: NeuronProps) => {
+  const { neuronWeights } = useActivationsStore();
+
   return (
     <div className="flex flex-row items-center">
       <div
         ref={neuronRef}
         className="h-[40px] w-[40px] rounded-full border-[1.5px] border-white transition-all duration-300 hover:scale-[1.05]"
-        style={{ backgroundColor: getBackgroundColor(activation) }}
+        style={{
+          backgroundColor: getBackgroundColor(activation, neuronWeights, layer),
+          transition: "background-color 0.3s ease-in-out",
+        }}
         onMouseEnter={(e) => {
           onMouseEnter();
         }}

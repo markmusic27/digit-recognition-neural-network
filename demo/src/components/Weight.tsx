@@ -45,7 +45,10 @@ const Weight = (props: WeightProps) => {
           x2={connection.x}
           y2={connection.y}
           stroke={getColor(connection.activation)}
-          style={{ zIndex: connection.activation * 100 }}
+          style={{
+            zIndex: connection.activation * 100,
+            transition: "stroke 0.3s ease-in-out",
+          }}
         />
       ))}
     </svg>

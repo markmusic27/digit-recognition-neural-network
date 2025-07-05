@@ -26,6 +26,12 @@ interface ActivationsState {
   addNeuronPosition: (neuron: NeuronDisplay) => void;
   removeNeuronPositions: (layer: number) => void;
   clearAllNeuronPositions: () => void;
+  // Animation weights
+  weights: number[];
+  setWeights: (w: number[]) => void;
+
+  neuronWeights: number[];
+  setNeuronWeights: (w: number[]) => void;
 }
 
 export const useActivationsStore = create<ActivationsState>()(
@@ -67,6 +73,12 @@ export const useActivationsStore = create<ActivationsState>()(
       clearAllNeuronPositions: () => {
         set({ neuronPositions: {} });
       },
+      // Animation weights
+      weights: [0, 0, 0],
+      setWeights: (w: number[]) => set({ weights: w }),
+
+      neuronWeights: [0, 0, 0, 0],
+      setNeuronWeights: (w: number[]) => set({ neuronWeights: w }),
     }),
     { name: "activations-storage" },
   ),
