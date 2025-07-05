@@ -3,7 +3,7 @@ import CustomTextLink from "./CustomTextLink";
 import CustomButton from "./CustomButton";
 
 const Docs = () => {
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState(1000);
 
   useEffect(() => {
     const updateHeight = () => setHeight(window.innerHeight);
