@@ -55,7 +55,8 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
   return (
     <div className="flex flex-col gap-[10px]">
       {neurons.map((act, i) => {
-        if (isInput && i === Math.floor(neurons.length / 2)) {
+        if (isInput && i === Math.floor((neurons.length - 1) / 2)) {
+          console.log(i);
           return (
             <div key={i}>
               <Neuron

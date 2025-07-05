@@ -6,31 +6,26 @@ type NetworkProps = {
 };
 
 const Network = (props: NetworkProps) => {
-  const { hidden1, hidden2, output } = useActivationsStore();
+  const { activations, hidden1, hidden2, output } = useActivationsStore();
+
+  const formatActivations = (activations: number[]) => {
+    const first8 = activations.slice(0, 8);
+    const last8 = activations.slice(-8);
+    const sublist = [...first8, ...last8];
+    return sublist;
+  };
+
   return (
-    <div className="relative bg-red-900">
+    <div className="relative">
       <div className="flex items-center justify-center gap-[180px]">
-        <p>{hidden1.length}</p>
         <Layer
           layer={0}
           isInput={true}
-          neurons={Array.from({ length: 16 }, () => Math.random())}
+          neurons={formatActivations(activations)}
         />
-        <p>{hidden2.length}</p>
-        <Layer
-          layer={0}
-          neurons={Array.from({ length: 16 }, () => Math.random())}
-        />
-        <p>{output.length}</p>
-        <Layer
-          layer={0}
-          neurons={Array.from({ length: 16 }, () => Math.random())}
-        />
-        <Layer
-          layer={0}
-          isOutput={true}
-          neurons={Array.from({ length: 10 }, () => Math.random())}
-        />
+        <Layer layer={0} neurons={hidden1} />
+        <Layer layer={0} neurons={hidden2} />
+        <Layer layer={0} isOutput={true} neurons={output} />
       </div>
     </div>
   );
