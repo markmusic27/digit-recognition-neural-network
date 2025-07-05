@@ -28,9 +28,9 @@ interface NeuronProps {
 }
 
 const getBackgroundColor = (activation: number) => {
-  // Convert activation (0-1) to opacity (0-255)
-  const opacity = Math.round(activation * 255);
-  return `rgba(255, 255, 255, ${activation})`;
+  // Blends black and white based on activation
+  const gray = Math.round(255 * activation);
+  return `rgba(${gray}, ${gray}, ${gray}, 1)`;
 };
 
 const Neuron = ({

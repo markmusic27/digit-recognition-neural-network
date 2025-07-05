@@ -6,6 +6,7 @@ import Network from "~/components/Network";
 import { useActivationsStore } from "~/store/activations";
 import type { PredictionData } from "~/types/prediction";
 import { env } from "~/env";
+import Weight from "~/components/Weight";
 
 export default function PredictPage() {
   const {
@@ -47,9 +48,13 @@ export default function PredictPage() {
       }`}
     >
       <div className="relative h-screen w-screen">
+        {/* Network */}
         <div className="absolute top-1/2 left-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2">
           <Network width={300} />
         </div>
+
+        {/* Weights */}
+        <Weight x1={100} y1={100} x2={1200} y2={600} activation={0} z={0} />
       </div>
     </div>
   );
