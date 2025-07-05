@@ -7,6 +7,7 @@ import { useActivationsStore } from "~/store/activations";
 import type { PredictionData } from "~/types/prediction";
 import { env } from "~/env";
 import Weight, { type WeightConnection } from "~/components/Weight";
+import CustomButton from "~/components/CustomButton";
 
 const LAYERS = [16, 16, 16, 10];
 
@@ -53,6 +54,16 @@ export default function PredictPage() {
       }`}
     >
       <div className="relative h-screen w-screen">
+        {/* Other Inidcators */}
+        <div className="absolute bottom-[42px] left-1/2 z-[201] -translate-x-1/2 md:bottom-[60px]">
+          <CustomButton
+            text="Predict Another"
+            icon="􀆉"
+            iconSize={14}
+            onClick={router.back}
+          />
+        </div>
+
         {/* Network */}
         <div className="absolute top-1/2 left-1/2 z-[200] -translate-x-1/2 -translate-y-1/2">
           <Network width={300} />

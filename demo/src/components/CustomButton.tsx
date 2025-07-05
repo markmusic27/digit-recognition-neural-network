@@ -28,12 +28,14 @@ interface CustomButtonProps {
   onClick?: () => void;
   text?: string;
   icon?: string;
+  iconSize?: number;
   secondary?: boolean;
 }
 
 const CustomButton = ({
   onClick,
   text,
+  iconSize = 18,
   icon,
   secondary = false,
 }: CustomButtonProps) => {
@@ -49,7 +51,9 @@ const CustomButton = ({
         onClick={onClick}
       >
         {icon == undefined ? null : (
-          <p className="font-sf text-[18px] font-[400] text-[#1A1A1A]">
+          <p
+            className={`font-sf text-[${iconSize}px] font-[400] text-[#1A1A1A]`}
+          >
             {icon}
           </p>
         )}
