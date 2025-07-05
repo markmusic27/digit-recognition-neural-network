@@ -84,7 +84,7 @@ export default function HomePage() {
           >
             <div className="rounded-[17px] border-[1px] border-[#2A2A2A] bg-[#0A0A0A] px-[26px] py-[14px] text-center text-[#939393]">
               <p className="font-sf cursor-default text-[16px] font-[400px] tracking-wide whitespace-nowrap">
-                Draw on box below
+                Try drawing a 2 in the box below!
               </p>
             </div>
           </div>
