@@ -9,6 +9,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     ENDPOINT: z.string().url(),
+    DEV_ENDPOINT: z.string().url(),
     KEY: z.string(),
   },
 
@@ -27,6 +28,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    DEV_ENDPOINT: process.env.DEV_ENDPOINT,
     ENDPOINT: process.env.ENDPOINT,
     KEY: process.env.KEY,
   },

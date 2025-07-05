@@ -5,7 +5,8 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const response = await fetch(`${env.ENDPOINT}/predict`, {
+    const response = await fetch(`${env.DEV_ENDPOINT}/predict`, {
+      // TODO: CHANGE THIS BACK TO ENDPOINT
       method: "POST",
       headers: {
         "Content-Type": "application/json",

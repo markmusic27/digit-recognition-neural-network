@@ -8,9 +8,9 @@ import type { PredictionData } from "~/types/prediction";
 import { env } from "~/env";
 
 export default function PredictPage() {
-  const { activations } = useActivationsStore();
+  const { activations, setHidden1, setHidden2, setOutput } =
+    useActivationsStore();
   const [loaded, setLoaded] = useState(false);
-  const [prediction, setPrediction] = useState<PredictionData | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +26,9 @@ export default function PredictPage() {
     })
       .then((res) => res.json())
       .then((data: PredictionData) => {
-        setPrediction(data);
+        setHidden1(data.h1);
+        setHidden2(data.h2);
+        setOutput(data.o);
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
@@ -41,11 +43,6 @@ export default function PredictPage() {
       <div className="flex flex-row justify-center">
         <Network width={300} />
       </div>
-      {prediction && (
-        <div>
-          <p>Predicted digit: {prediction.predicted_digit}</p>
-        </div>
-      )}
     </div>
   );
 }
