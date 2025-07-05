@@ -32,7 +32,7 @@ const getBackgroundColor = (
   weights: number[],
   layer: number,
 ) => {
-  let w: number = weights[layer] === undefined ? 1 : weights[layer];
+  const w: number = weights[layer] ?? 1;
 
   // Blends black and white based on activation
   const gray = Math.round(255 * activation * w);
@@ -59,10 +59,10 @@ const Neuron = ({
           backgroundColor: getBackgroundColor(activation, neuronWeights, layer),
           transition: "background-color 0.3s ease-in-out",
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={(_) => {
           onMouseEnter();
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={(_) => {
           onMouseLeave();
         }}
       ></div>

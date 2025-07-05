@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Network from "~/components/Network";
 import { useActivationsStore } from "~/store/activations";
 import type { PredictionData } from "~/types/prediction";
-import { env } from "~/env";
 import Weight, { type WeightConnection } from "~/components/Weight";
 import CustomButton from "~/components/CustomButton";
 import "katex/dist/katex.min.css";
@@ -112,8 +111,8 @@ export default function PredictPage() {
   }
 
   const getMath = (hA: [number, number], nP: Record<string, NeuronDisplay>) => {
-    let digit = `a_{${hA[0]}}^{(${hA[1]})}`;
-    let n = nP[`${hA[0]}-${hA[1]}`];
+    const digit = `a_{${hA[0]}}^{(${hA[1]})}`;
+    const n = nP[`${hA[0]}-${hA[1]}`];
     return `${digit} = ${n === undefined ? 0 : n.activation}`;
   };
 
@@ -157,7 +156,9 @@ export default function PredictPage() {
             text="Predict Another"
             icon="􀆉"
             iconSize={14}
-            onClick={router.back}
+            onClick={() => {
+              router.back();
+            }}
           />
         </div>
 
@@ -203,15 +204,15 @@ export default function PredictPage() {
                 return null;
               }
 
-              let nA = neuron;
-              let proceedingLayer = neuron.layer + 1;
+              const nA = neuron;
+              const proceedingLayer = neuron.layer + 1;
 
-              let connections: WeightConnection[] = [];
+              const connections: WeightConnection[] = [];
 
               for (let i = 0; i < LAYERS[proceedingLayer]!; i++) {
-                let nB = neuronPositions[`${proceedingLayer}-${i}`];
+                const nB = neuronPositions[`${proceedingLayer}-${i}`];
 
-                let w: number =
+                const w: number =
                   weights[neuron.layer] === undefined
                     ? 1
                     : weights[neuron.layer]!;
