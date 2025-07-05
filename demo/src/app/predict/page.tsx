@@ -21,6 +21,7 @@ export default function PredictPage() {
     setHidden1,
     setHidden2,
     setOutput,
+    output,
     hoveredActivation,
     neuronPositions,
     isHovering,
@@ -89,7 +90,9 @@ export default function PredictPage() {
       () => {
         // STEP 5
         setWeights([0, 1, 1]);
-        setShowHud(false);
+        if (screenWidth > 640) {
+          setShowHud(false);
+        }
       },
       500 + ANIMATION_DURATION * 10 + 200,
     );
@@ -146,14 +149,26 @@ export default function PredictPage() {
         </div>
 
         <div
-          className={`absolute top-[3%] left-1/2 z-[201] -translate-x-1/2 transition-opacity duration-400 ${
+          className={`absolute top-[3%] left-1/2 z-[201] block -translate-x-1/2 transition-opacity duration-400 md:hidden ${
+            showHUD ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div className="rounded-[17px] border-[1px] border-[#2A2A2A] bg-[#0A0A0A] px-[26px] py-[14px] text-center text-[#939393]">
+            <p className="font-sf cursor-default text-[16px] font-[400px] tracking-wide whitespace-nowrap">
+              {`Predicted ${output.indexOf(Math.max(...output))} with ${(Math.max(...output) * 100).toFixed(1)}% confidence`}
+            </p>
+          </div>
+        </div>
+
+        <div
+          className={`absolute top-[3%] left-1/2 z-[201] hidden -translate-x-1/2 transition-opacity duration-400 md:block ${
             showHUD || isHovering ? "opacity-100" : "opacity-0"
           }`}
         >
           <div className="rounded-[17px] border-[1px] border-[#2A2A2A] bg-[#0A0A0A] px-[26px] py-[14px] text-[#939393]">
             {showHUD ? (
               <p className="font-sf cursor-default text-[16px] font-[400px] tracking-wide">
-                Hover over neurons to view activations
+                {`Predicted ${output.indexOf(Math.max(...output))} with ${(Math.max(...output) * 100).toFixed(1)}% confidence`}
               </p>
             ) : (
               <InlineMath math={getMath(hoveredActivation, neuronPositions)} />
