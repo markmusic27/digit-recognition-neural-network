@@ -46,9 +46,10 @@ export default function PredictPage() {
         loaded ? "opacity-100" : "opacity-0"
       }`}
     >
-      <p>{`Layer ${hoveredActivation?.[0]}, Neuron ${hoveredActivation?.[1]}, Position: ${neuronPositions[`0-0`]?.x}, ${neuronPositions[`0-0`]?.y}`}</p>
-      <div className="flex flex-row justify-center">
-        <Network width={300} />
+      <div className="relative h-screen w-screen">
+        <div className="absolute top-1/2 left-1/2 z-[1000] -translate-x-1/2 -translate-y-1/2">
+          <Network width={300} />
+        </div>
       </div>
     </div>
   );

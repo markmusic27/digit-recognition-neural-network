@@ -16,17 +16,15 @@ const Network = (props: NetworkProps) => {
   };
 
   return (
-    <div className="relative">
-      <div className="flex items-center justify-center gap-[180px]">
-        <Layer
-          layer={0}
-          isInput={true}
-          neurons={formatActivations(activations)}
-        />
-        <Layer layer={1} neurons={hidden1} />
-        <Layer layer={2} neurons={hidden2} />
-        <Layer layer={3} isOutput={true} neurons={output} />
-      </div>
+    <div className="flex items-center justify-center gap-[180px]">
+      <Layer
+        layer={0}
+        isInput={true}
+        neurons={formatActivations(activations)}
+      />
+      <Layer layer={1} neurons={hidden1} />
+      <Layer layer={2} neurons={hidden2} />
+      <Layer layer={3} isOutput={true} neurons={output} />
     </div>
   );
 };
