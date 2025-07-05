@@ -20,9 +20,10 @@ export type BoardHandle = {
 
 type BoardProps = {
   onDraw?: (pixels: number[][]) => void;
+  scale: number;
 };
 
-const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
+const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw, scale }, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [pixels, setPixels] = useState<number[][]>(
     Array.from({ length: 28 }, () => Array(28).fill(0)),
@@ -221,6 +222,10 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
       <div
         ref={boardRef}
         className="relative h-[280px] w-[280px] cursor-crosshair overflow-hidden bg-black outline-[3px] outline-[#ffffff4d] transition-all duration-500 hover:scale-[1.01] md:outline-[6px]"
+        style={{
+          cursor: "none", // Hide default cursor
+          transform: `scale(${1 + scale})`,
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -229,9 +234,6 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ onDraw }, ref) => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        style={{
-          cursor: "none", // Hide default cursor
-        }}
       >
         {/* Drawing grid */}
         <div className="absolute inset-0 grid grid-cols-28 grid-rows-28">

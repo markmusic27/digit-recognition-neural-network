@@ -33,7 +33,7 @@ const MathPreview = () => {
 
   const handleScrollDown = () => {
     const height = window.innerHeight;
-    window.scrollBy({ top: height * 0.87, left: 0, behavior: "smooth" });
+    window.scrollBy({ top: height, left: 0, behavior: "smooth" });
   };
 
   return (
@@ -50,7 +50,6 @@ const MathPreview = () => {
         </button>
         <Docs />
       </div>
-      <div className="h-[100px]"></div>
     </div>
   );
 };
