@@ -94,7 +94,18 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
   useEffect(() => {
     // Small delay to ensure DOM is ready
     const timer = setTimeout(updateNeuronPositions, 0);
-    return () => clearTimeout(timer);
+
+    // Handler for window resize
+    const handleResize = () => {
+      updateNeuronPositions();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [neurons, layer]);
 
   // Cleanup when component unmounts

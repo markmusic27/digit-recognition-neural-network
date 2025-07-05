@@ -54,7 +54,22 @@ export default function PredictPage() {
         </div>
 
         {/* Weights */}
-        <Weight x1={100} y1={100} x2={1200} y2={600} activation={0} z={0} />
+        <Weight
+          x1={neuronPositions["0-3"]?.x!}
+          y1={neuronPositions["0-3"]?.y!}
+          x2={neuronPositions["1-1"]?.x!}
+          y2={neuronPositions["1-1"]?.y!}
+          activation={0.5}
+          z={0}
+        />
+        <Weight
+          x1={neuronPositions["1-1"]?.x!}
+          y1={neuronPositions["1-1"]?.y!}
+          x2={neuronPositions["2-1"]?.x!}
+          y2={neuronPositions["2-1"]?.y!}
+          activation={0.5}
+          z={0}
+        />
       </div>
     </div>
   );
