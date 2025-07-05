@@ -2,12 +2,14 @@ export interface WeightConnection {
   x: number;
   y: number;
   activation: number;
+  z: number;
 }
 
 interface WeightProps {
   x1: number;
   y1: number;
   connections: WeightConnection[];
+  thickness: number;
 }
 
 const Weight = (props: WeightProps) => {
@@ -36,7 +38,10 @@ const Weight = (props: WeightProps) => {
   };
 
   return (
-    <svg className="pointer-events-none absolute top-0 left-0 h-full w-full stroke-[1px]">
+    <svg
+      className="pointer-events-none absolute top-0 left-0 h-full w-full"
+      style={{ strokeWidth: props.thickness }}
+    >
       {connections.map((connection, i) => (
         <line
           key={i}
@@ -46,7 +51,7 @@ const Weight = (props: WeightProps) => {
           y2={connection.y}
           stroke={getColor(connection.activation)}
           style={{
-            zIndex: connection.activation * 100,
+            zIndex: connection.z * 100,
             transition: "stroke 0.3s ease-in-out",
           }}
         />

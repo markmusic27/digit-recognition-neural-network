@@ -34,6 +34,19 @@ export default function PredictPage() {
   const [showHUD, setShowHud] = useState(false);
   const router = useRouter();
 
+  // Disable scrolling
+  useEffect(() => {
+    // Disable scrolling
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    // Re-enable scrolling on unmount
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
+
   // Screen width state
   useEffect(() => {
     const updateScreenWidth = () => {
@@ -133,11 +146,11 @@ export default function PredictPage() {
 
   return (
     <div
-      className={`flex h-screen flex-col justify-center transition-opacity duration-300 ${
+      className={`flex h-[100dvh] flex-col justify-center transition-opacity duration-300 ${
         loaded ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="relative h-screen w-screen">
+      <div className="relative h-[100dvh] w-[100dvw]">
         {/* Other Inidcators */}
         <div className="absolute bottom-[4%] left-1/2 z-[201] -translate-x-1/2">
           <CustomButton
@@ -207,6 +220,7 @@ export default function PredictPage() {
                   connections.push({
                     x: nB.x,
                     y: nB.y,
+                    z: nA.activation * nB.activation * 100,
                     activation:
                       nA.layer === 0 ? w : nA.activation * nB.activation * w,
                   });
@@ -218,6 +232,7 @@ export default function PredictPage() {
                   key={ind}
                   x1={nA.x}
                   y1={nA.y}
+                  thickness={screenWidth < 820 ? 0.5 : 1}
                   connections={connections}
                 />
               );
