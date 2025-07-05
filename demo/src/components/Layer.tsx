@@ -9,7 +9,7 @@ interface LayerProps {
   isOutput?: boolean;
 }
 
-interface NeuronDisplay {
+export interface NeuronDisplay {
   x: number;
   y: number;
   layer: number;
@@ -79,6 +79,8 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
     resetHoveredActivation,
     addNeuronPosition,
     removeNeuronPositions,
+    isHovering,
+    setIsHovering,
   } = useActivationsStore();
 
   const neuronRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -134,7 +136,6 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
     <div className="flex flex-col gap-[10px]">
       {neurons.map((act, i) => {
         if (isInput && i === Math.floor((neurons.length - 1) / 2)) {
-          console.log(i);
           return (
             <div key={i}>
               <Neuron
@@ -142,8 +143,13 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
                 key={i}
                 index={i}
                 layer={layer}
-                onMouseEnter={() => setHoveredActivation(layer, i)}
-                onMouseLeave={() => resetHoveredActivation()}
+                onMouseEnter={() => {
+                  setHoveredActivation(layer, i);
+                  setIsHovering(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHovering(false);
+                }}
                 neuronRef={setNeuronRef(i)}
               />
               <div className="h-[10px]" />
@@ -159,8 +165,13 @@ const Layer = ({ neurons, layer, isInput, isOutput }: LayerProps) => {
             index={i}
             layer={layer}
             isOutput={isOutput}
-            onMouseEnter={() => setHoveredActivation(layer, i)}
-            onMouseLeave={() => resetHoveredActivation()}
+            onMouseEnter={() => {
+              setHoveredActivation(layer, i);
+              setIsHovering(true);
+            }}
+            onMouseLeave={() => {
+              setIsHovering(false);
+            }}
             neuronRef={setNeuronRef(i)}
           />
         );

@@ -18,9 +18,12 @@ interface ActivationsState {
   setHidden2: (a: number[]) => void;
   output: number[];
   setOutput: (a: number[]) => void;
-  hoveredActivation: [number, number] | null;
+  hoveredActivation: [number, number];
   setHoveredActivation: (layer: number, index: number) => void;
   resetHoveredActivation: () => void;
+
+  isHovering: boolean;
+  setIsHovering: (b: boolean) => void;
   // Neuron position tracking
   neuronPositions: Record<string, NeuronDisplay>;
   addNeuronPosition: (neuron: NeuronDisplay) => void;
@@ -46,11 +49,13 @@ export const useActivationsStore = create<ActivationsState>()(
       setHidden2: (a: number[]) => set({ hidden2: a } as ActivationsState),
       output: Array(10).fill(0),
       setOutput: (a: number[]) => set({ output: a } as ActivationsState),
-      hoveredActivation: null,
-      setHoveredActivation: (layer: number, index: number) =>
-        set({ hoveredActivation: [layer, index] } as Partial<ActivationsState>),
+      hoveredActivation: [0, 0] as [number, number],
+      isHovering: false,
+      setIsHovering: (b: boolean) => set({ isHovering: b } as ActivationsState),
+      setHoveredActivation: (l: number, i: number) =>
+        set({ hoveredActivation: [l, i] } as ActivationsState),
       resetHoveredActivation: () =>
-        set({ hoveredActivation: null } as Partial<ActivationsState>),
+        set({ hoveredActivation: [0, 0] } as ActivationsState),
       // Neuron position tracking
       neuronPositions: {},
       addNeuronPosition: (neuron: NeuronDisplay) => {

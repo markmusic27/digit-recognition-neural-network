@@ -8,6 +8,9 @@ import type { PredictionData } from "~/types/prediction";
 import { env } from "~/env";
 import Weight, { type WeightConnection } from "~/components/Weight";
 import CustomButton from "~/components/CustomButton";
+import "katex/dist/katex.min.css";
+import { InlineMath } from "react-katex";
+import type { NeuronDisplay } from "~/components/Layer";
 
 const LAYERS = [16, 16, 16, 10];
 const ANIMATION_DURATION = 800;
@@ -20,6 +23,7 @@ export default function PredictPage() {
     setOutput,
     hoveredActivation,
     neuronPositions,
+    isHovering,
     weights,
     setWeights,
     setNeuronWeights,
@@ -91,6 +95,12 @@ export default function PredictPage() {
     );
   }
 
+  const getMath = (hA: [number, number], nP: Record<string, NeuronDisplay>) => {
+    let digit = `a_{${hA[0]}}^{(${hA[1]})}`;
+    let n = nP[`${hA[0]}-${hA[1]}`];
+    return `${digit} = ${n === undefined ? 0 : n.activation}`;
+  };
+
   useEffect(() => {
     setLoaded(false);
 
@@ -137,12 +147,18 @@ export default function PredictPage() {
 
         <div
           className={`absolute top-[3%] left-1/2 z-[201] -translate-x-1/2 transition-opacity duration-400 ${
-            showHUD || hoveredActivation != undefined
-              ? "opacity-100"
-              : "opacity-0"
+            showHUD || isHovering ? "opacity-100" : "opacity-0"
           }`}
         >
-          <div className="h-[50px] w-[200px] bg-amber-400"></div>
+          <div className="rounded-[17px] border-[1px] border-[#2A2A2A] bg-[#0A0A0A] px-[26px] py-[14px] text-[#939393]">
+            {showHUD ? (
+              <p className="font-sf cursor-default text-[16px] font-[400px] tracking-wide">
+                Hover over neurons to view activations
+              </p>
+            ) : (
+              <InlineMath math={getMath(hoveredActivation, neuronPositions)} />
+            )}
+          </div>
         </div>
 
         {/* Network */}
