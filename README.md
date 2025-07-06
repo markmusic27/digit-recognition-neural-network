@@ -1,6 +1,6 @@
 <p align="center">
 <p align="center">
-   <img width="125" height="125" src="https://github.com/markmusic27/digit-recognition-neural-network/blob/main/docs/logo.png?raw=true" alt="Logo">
+   <img width="250" height="250" src="https://github.com/markmusic27/digit-recognition-neural-network/blob/main/docs/logo.png?raw=true" alt="Logo">
   </p>
   <h1 align="center"><b>Digit Recognizer Neural Network</b></h1>
   <p align="center">
