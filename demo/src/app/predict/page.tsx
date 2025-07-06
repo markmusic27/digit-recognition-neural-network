@@ -134,12 +134,16 @@ export default function PredictPage() {
         setOutput(data.o);
         setLoaded(true);
 
-        animateIn();
+        // Delay animation to ensure layout is ready
+        setTimeout(() => {
+          animateIn();
+        }, 100);
       })
       .catch(() => {
         setLoaded(true);
-
-        animateIn();
+        setTimeout(() => {
+          animateIn();
+        }, 100);
       });
   }, [activations, router]);
 
@@ -190,15 +194,16 @@ export default function PredictPage() {
           </div>
         </div>
 
-        {/* Network */}
-        <div className="absolute top-1/2 left-1/2 z-[200] -translate-x-1/2 -translate-y-1/2">
-          <Network width={300} />
-        </div>
+        {/* Network and Weights */}
+        {loaded && neuronPositions ? (
+          <>
+            {/* Network */}
+            <div className="absolute top-1/2 left-1/2 z-[200] -translate-x-1/2 -translate-y-1/2">
+              <Network width={300} />
+            </div>
 
-        {/* Weights */}
-        {neuronPositions === undefined
-          ? null
-          : Object.values(neuronPositions).map((neuron, ind) => {
+            {/* Weights */}
+            {Object.values(neuronPositions).map((neuron, ind) => {
               if (neuron.layer === 3) {
                 // Output layer so no weight
                 return null;
@@ -238,6 +243,8 @@ export default function PredictPage() {
                 />
               );
             })}
+          </>
+        ) : null}
       </div>
     </div>
   );

@@ -3,15 +3,27 @@ interface BlurProps {
   zIndex?: number;
   opacity?: number;
   top?: number;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
-const Blur = ({ blur = 0, zIndex = 0, opacity = 1, top = 0 }: BlurProps) => {
+const Blur = ({
+  blur = 0,
+  zIndex = 0,
+  opacity = 1,
+  top = 0,
+  style,
+  className,
+}: BlurProps) => {
   return (
     <div
-      className={`absolute left-1/2 z-[${zIndex}] -translate-x-1/2 animate-pulse opacity-[0.7] transition-all duration-600 md:opacity-[1]`}
+      className={`absolute left-1/2 -translate-x-1/2 animate-pulse transition-all duration-600 md:opacity-[1] ${className ?? ""}`}
       style={{
         top: `${top}px`,
+        zIndex,
+        opacity,
         animation: "scaleAnimation 3s ease-in-out infinite",
+        ...style,
       }}
     >
       <img

@@ -19,6 +19,7 @@ export default function HomePage() {
   const router = useRouter();
   const { setActivations } = useActivationsStore();
   const [showTutorial, setShowTutorial] = useState(false);
+  const [blursVisible, setBlursVisible] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -38,13 +39,15 @@ export default function HomePage() {
       setButtonVisible(true);
     }, 650);
 
-    setTimeout(() => {
-      window.scrollBy(0, 1);
-    }, 5);
+    // Animate in blurs after 1000ms
+    const blurTimer = setTimeout(() => {
+      setBlursVisible(true);
+    }, 1000);
 
     return () => {
       clearTimeout(headerTimer);
       clearTimeout(buttonTimer);
+      clearTimeout(blurTimer);
     };
   }, []);
 
@@ -137,16 +140,26 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <Blur blur={10} zIndex={4} top={calcMarginBoard(windowSize.height)} />
+          <Blur
+            blur={10}
+            zIndex={4}
+            top={calcMarginBoard(windowSize.height)}
+            opacity={blursVisible ? 1 : 0}
+            className="transition-opacity duration-700"
+          />
           <Blur
             blur={100}
             zIndex={3}
             top={calcMarginBoard(windowSize.height)}
+            opacity={blursVisible ? 1 : 0}
+            className="transition-opacity duration-700"
           />
           <Blur
             blur={300}
             zIndex={2}
             top={calcMarginBoard(windowSize.height)}
+            opacity={blursVisible ? 1 : 0}
+            className="transition-opacity duration-700"
           />
 
           <div
