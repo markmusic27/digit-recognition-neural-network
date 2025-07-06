@@ -1,5 +1,3 @@
-hello world
-
 # Digit Recognition API (deployed)
 
 A lightweight FastAPI-based web service for digit recognition using your trained neural network.

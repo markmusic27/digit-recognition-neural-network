@@ -5,8 +5,32 @@ import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Handwritten Digit Generator",
   description:
-    "Classifies 28x28px handwritten digits into numbers with ~90% accuracy.",
+    "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  openGraph: {
+    title: "Handwritten Digit Generator",
+    description:
+      "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
+    url: "https://digit-recognition-nn.vercel.app",
+    siteName: "Handwritten Digit Generator",
+    images: [
+      {
+        url: "/thumbnail.png",
+        width: 1100,
+        height: 630,
+        alt: "Handwritten Digit Recognition Neural Network",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Handwritten Digit Generator",
+    description:
+      "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
+    images: ["/thumbnail.png"],
+  },
 };
 
 const louize = localFont({
