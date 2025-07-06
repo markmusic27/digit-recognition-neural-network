@@ -3,16 +3,16 @@ import localFont from "next/font/local";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Handwritten Digit Generator",
+  title: "Handwritten Digit Recognizer",
   description:
     "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   openGraph: {
-    title: "Handwritten Digit Generator",
+    title: "Handwritten Digit Recognizer",
     description:
       "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
     url: "https://digit-recognition-nn.vercel.app",
-    siteName: "Handwritten Digit Generator",
+    siteName: "Handwritten Digit Recognizer",
     images: [
       {
         url: "/thumbnail.png",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Handwritten Digit Generator",
+    title: "Handwritten Digit Recognizer",
     description:
       "Classify 28x28px handwritten digits into numbers with ~90% accuracy.",
     images: ["/thumbnail.png"],
