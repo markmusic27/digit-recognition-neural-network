@@ -33,7 +33,11 @@ By far the most useful part of this project was the realization that Neural Netw
 > **On the math level required for this project:**
 > I just took [Math 51](https://web.stanford.edu/class/math51/), Stanford's Linear Algebra and Multivariable Calculus course, and the math felt very familiar. You can definitely understand everything with basic calculus skills. Expressing everything as linear algebra makes everything more notationally convenient. It's also convention so most Python frameworks, like `numpy` use Linear Algebra operations like the transpose. I'd recommend 3Blue1Brown's calculus and nerual network courses for anyone who is going into this with little to no calculus experience.
 
-Lets get into it.
+Lets get into it. As I mentioned above, Neural Networks are just elaborate math functions. Hence, we need ways to numerically describe the input and output to this function:
+- Input is a 28x28px image in black and white. We represent this as a list of the pixel values where each value is between 0 (black) and 1 (white). This corresponds to an input space of $784$ or $28^2$ numbers.
+- Output is a list of the possible digits (integers between 0 and 9) that the image could represent. We represent this as a list of the model's confidence that the image represents a certain number. This corresponds to an output space of $10$.
+  
+
 
 ## Citations
 
