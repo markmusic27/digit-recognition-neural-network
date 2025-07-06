@@ -1,4 +1,7 @@
 <p align="center">
+<p align="center">
+   <img width="125" height="125" src="https://i.ibb.co/8c5VDRr/thumbnail.png" alt="Logo">
+  </p>
   <h1 align="center"><b>Digit Recognizer Neural Network</b></h1>
   <p align="center">
   ✶ Classifies 28x28px handwritten digits with ~90% accuracy ✶
@@ -8,9 +11,11 @@
   </p>
 </p>
 
-The following is a command-line Stanford Grade Calculator. This handy command-line tool helps you figure out your GPA for a specific quarter, a whole year, or even your overall GPA easily.
+_Note on accuracy:_ the ~90% accuracy score was computed by testing the model on images from the [MNIST database](https://www.kaggle.com/datasets/hojjatk/mnist-dataset) that had not been used in training (~10k of them). I've noticed user-generated images can differ significantly from what's found in MNIST, so the demo's accuracy _is likely worse (perhaps significantly)._
 
-![Demo of Stanford Grade Calculator](https://github.com/markmusic27/gpa_calculator/blob/main/docs/demo.png?raw=true)
+![Project Demo](https://github.com/markmusic27/digit-recognition-neural-network/blob/main/docs/thumbnail_readme.png?raw=true)
+
+I built this as an exercise to learn more about the mathematical underpinnings of modern AI tech. Don't get me wrong: vanilla neural nets, and got forbid my implementation of them, are nowhere near "the latest in AI." But I found it to be a 
 
 
 ## How GPA is Calculated
