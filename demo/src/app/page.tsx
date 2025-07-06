@@ -42,7 +42,7 @@ export default function HomePage() {
     // Animate in blurs after 1000ms
     const blurTimer = setTimeout(() => {
       setBlursVisible(true);
-    }, 1000);
+    }, 700);
 
     return () => {
       clearTimeout(headerTimer);
