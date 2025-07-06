@@ -37,7 +37,29 @@ Lets get into it. As I mentioned above, Neural Networks are just elaborate math 
 - Input is a 28x28px image in black and white. We represent this as a list of the pixel values where each value is between 0 (black) and 1 (white). This corresponds to an input space of $784$ or $28^2$ numbers.
 - Output is a list of the possible digits (integers between 0 and 9) that the image could represent. We represent this as a list of the model's confidence that the image represents a certain number. This corresponds to an output space of $10$.
   
+The basic structure for the network then looks like this:
 
+**ADD IMAGE**
+
+I chose 2 hidden layers with 16 neurons because that's what Grant Sanderson did in his series, and it renders nicely on the demo website. These are things that you can tweak. What's important to note here is that our hope is that as the data gets processed from the first neuron to the last, the model is able to capture distinguishing features of the image that help it identify which digit it represents. Hence, we can think of each layer as an inner function that modifies the data in such a way that it brings us closer to classifying the image.
+
+Each neuron in any layer is defined as follows: it's the weighted sum of all of the activations in the previous layer plus a bias. Each one of these weights determines how much of a previous layer's activation affects the current activation. This is done for every neuron in the layer. We define this weighted sum and the bias as $z$.
+
+$$
+z^{(k)}=W\cdot a^{(k-1)}+b^{(k)}
+$$
+
+where $W$ is the weight matrix where the columns correspond to... **FINISH**
+
+We then plug this into what's called an activation function. Since we want every activation to be a number between 0 and 1, we use the sigmoid function: $\sigma (x)$. Values that are very small become 0 and values that are very large become 1. The function is defined as
+$$
+\sigma (x)=\frac{1}{1+e^{-x}}$$
+
+**ADD GRAPH**
+
+Hence, our activations can be written as
+
+$$a^{(k)}=\sigma (z^{(k)})$$
 
 ## Citations
 
