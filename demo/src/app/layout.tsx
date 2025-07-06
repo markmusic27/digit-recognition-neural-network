@@ -5,7 +5,7 @@ import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Handwritten Digit Generator",
   description:
-    "Classifies 28x28px handwritten digits into numbers with ~98% accuracy.",
+    "Classifies 28x28px handwritten digits into numbers with ~90% accuracy.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
