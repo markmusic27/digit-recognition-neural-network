@@ -52,8 +52,10 @@ $$
 where $W$ is the weight matrix where the columns correspond to... **FINISH**
 
 We then plug this into what's called an activation function. Since we want every activation to be a number between 0 and 1, we use the sigmoid function: $\sigma (x)$. Values that are very small become 0 and values that are very large become 1. The function is defined as
+
 $$
-\sigma (x)=\frac{1}{1+e^{-x}}$$
+\sigma (x)=\frac{1}{1+e^{-x}}
+$$
 
 **ADD GRAPH**
 
