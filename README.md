@@ -58,9 +58,7 @@ where
 
 This weight matrix is indexed as follows: each entry $w^{(l)}_{jk}$ describes the strength of the connection between the previous activation $a^{(l-1)}_k$ and the current one $a^{(l)}_j$. To clarify, __$j$ is the index of the neuron in the current layer__ and __$k$ is the index of the neuron in the previous layer.__ Moreover, we think of each individual activation as being the dot-product of a __row__ in the weight matrix and the previous activations + a bias.
 
-$$
-z^{(l)}_{k}=W^{(l)}_{(\text{row } k)}\cdot \mathbf{a^{(l-1)}}+b^{(l)}_{k}
-$$
+$$z^{(l)}_{k}=W^{(l)}_{(\text{row } k)}\cdot \mathbf{a^{(l-1)}}+b^{(l)}_{k}$$
 
 I emphasize that we conduct this operation layer by layer. This is how the algorithm is designed to run: conducting this linear combination for each layer until we arrive at an output. The way this is built out in code is by establishing a `Layer` class with two methods: `forward` and `backward`. We'll go into backward (which handles backpropagation) later. But all the method does is take a series of inputs $a^{(l-1)}$, compute the aforementioned operation, and spit out the output.
 
@@ -70,11 +68,11 @@ $$
 \sigma (x)=\frac{1}{1+e^{-x}}
 $$
 
-![](https://cloud2data.com/activation-function-sigmoid/2560px-Sigmoid-function-2.svg)
+![](https://i.ibb.co/DfTHf3Y5/final.png)
 
 Hence, our activations can be written as
 
-$$\bm{a^{(l)}}=\sigma (\bm{z^{(l)}})$$
+$$\mathbf{a^{(l)}}=\sigma (\mathbf{z^{(l)}})$$
 
 Now, we have all of the math we need to implement the forward function:
 ```py
