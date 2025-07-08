@@ -58,7 +58,9 @@ where
 
 This weight matrix is indexed as follows: each entry $w^{(l)}_{jk}$ describes the strength of the connection between the previous activation $a^{(l-1)}_k$ and the current one $a^{(l)}_j$. To clarify, __$j$ is the index of the neuron in the current layer__ and __$k$ is the index of the neuron in the previous layer.__ Moreover, we think of each individual activation as being the dot-product of a __row__ in the weight matrix and the previous activations + a bias.
 
-$$z^{(l)}_{k}=W^{(l)}_{(\text{row } k)}\cdot \mathbf{a^{(l-1)}}+b^{(l)}_{k}$$
+$$
+z^{(l)}_{k}=W^{(l)}_{(\text{row } k)}\cdot \mathbf{a^{(l-1)}}+b^{(l)}_{k}
+$$
 
 I emphasize that we conduct this operation layer by layer. This is how the algorithm is designed to run: conducting this linear combination for each layer until we arrive at an output. The way this is built out in code is by establishing a `Layer` class with two methods: `forward` and `backward`. We'll go into backward (which handles backpropagation) later. But all the method does is take a series of inputs $a^{(l-1)}$, compute the aforementioned operation, and spit out the output.
 
@@ -100,9 +102,89 @@ We call this the mean squared error loss function. Here, we take the output of a
 We solve this by taking the gradient of the loss with respect to both the weights ($\frac{\partial \mathcal{L}}{\partial W}$) and the biases ($\frac{\partial \mathcal{L}}{\partial b}$). We can then use these to perform a [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) step. In this example, we use Stochastic Gradient Descent, where backpropagation is performed after every training example. Hence, the gradients aren't averaged like its supposed to be done in conventional gradient descent. Lets find $\frac{\partial \mathcal{L}}{\partial W}$ and $\frac{\partial \mathcal{L}}{\partial b}$ mathematically.
 
 ### Finding $\frac{\partial \mathcal{L}}{\partial W}$
+We start off with the relevant loss function deliniated above $\mathcal{L}(\mathbf{a}, \mathbf{y})=\frac{1}{2}\|\mathbf{a}-\mathbf{y}\|^2$. We also note that $\mathbf{a}=\sigma (\mathbf{z})$. Hence, $\mathcal{L}$ depends on $\mathbf{a}$ which depends on $\mathbf{z}$ which depends on $\mathbf{W}$.
 
+$$
+\mathcal{L}\rightarrow\mathbf{a}\rightarrow\mathbf{z}\rightarrow\mathbf{W}
+$$
 
+Hence, we apply the chain rule to obtain
 
+$$
+\frac{\partial \mathcal{L}}{\partial W}=\frac{\partial \mathcal{L}}{\partial \mathbf{a}}\frac{\partial\mathbf{a}}{\partial\mathbf{z}}\frac{\partial\mathbf{z}}{\partial\mathbf{W}}
+$$
+
+Hence, we can find the relevant partial derivatives to compute $\frac{\partial \mathcal{L}}{\partial W}$.
+
+- $\frac{\partial \mathcal{L}}{\partial \mathbf{a}}$ will be inputted to the `backward` method. This represents how the activations need to change
+- $\frac{\partial \mathbf{a}}{\partial \mathbf{z}}=\frac{d}{d\mathbf{z}} (\sigma (\mathbf{z}))=\sigma'(\mathbf{z})$ where $\sigma' = \frac{\sigma}{1-\sigma}$
+- $\frac{\partial \mathbf{z}}{\partial \mathbf{W}}=\frac{d}{d\mathbf{W}}(W\cdot \mathbf{a^{(l-1)}}+\mathbf{b})=\mathbf{a^{(l-1)}}$ where $\mathbf{a^{(l-1)}}$ are the inputs of the layer
+
+Putting this all together, we get
+
+$$
+\frac{\partial \mathcal{L}}{\partial W}=\underbrace{\frac{\partial \mathcal{L}}{\partial \mathbf{a}}}_{\text{we're given}}\cdot \sigma ' (\mathbf{z})\cdot \mathbf{a^{(l-1)}}
+$$
+
+This is all we need to compute the gradient with respect to the weights.
+
+### Finding $\frac{\partial \mathcal{L}}{\partial \mathbf{b}}$
+We use the same chain rule method to obtain this partial derrivative... and it stays largely the same! The only difference is we differentiate $z$ with respect to $b$ and not $W$. In other words, we have
+
+$$
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}}=\underbrace{\frac{\partial \mathcal{L}}{\partial \mathbf{a}}\frac{\partial\mathbf{a}}{\partial\mathbf{z}}}_{\text{same as before}}\frac{\partial\mathbf{z}}{\partial\mathbf{b}}
+$$
+
+$$
+\implies \frac{d}{d\mathcal{b}}(W\cdot \mathbf{a^{(l-1)}}+\mathbf{b})=\mathbf{1}
+$$
+
+Therefore...
+
+$$
+\therefore \frac{\partial \mathcal{L}}{\partial b}=\underbrace{\frac{\partial \mathcal{L}}{\partial \mathbf{a}}}_{\text{we're given}}\cdot \sigma ' (\mathbf{z})\cdot 1
+$$
+
+### Gradient Descent Step
+
+With all of these equations in mind, we can now perform the gradient descent step necessary for backpropagation. What we do now is update our weights and biases in the direction of $\frac{\partial \mathcal{L}}{\partial W}$ and $\frac{\partial \mathcal{L}}{\partial b}$. We update
+
+$$
+\mathbf{W}:=\mathbf{W}-\eta \cdot \frac{\partial \mathcal{L}}{\partial \mathbf{W}}
+$$
+
+and
+
+$$
+\mathbf{b}:=\mathbf{b}-\eta \cdot \frac{\partial \mathcal{L}}{\partial \mathbf{b}}
+$$
+
+where $\eta$ is the learning rate. Basically, this determines how big a change to make with each passing training example.
+
+### Implementation
+I skipped over a big component of the math which describes the dimension of the individual components necessary to make the math work. More specifically, performing the `backward` pass requires the outer and matrix-vector product operation, which sometimes requires the transpose. That said, here's the implementation of the backpropagation:
+
+```py
+def backward(self, da, learning_rate):
+        # Step 1: dz = da * sigmoid'(z)
+        sig_der_at_z = sigmoid_derivative(self.a)  # Shape: (output, 1)
+        dz = da * sig_der_at_z                     # Element-wise multiply
+
+        # Step 2: dW = outer product of dz and x
+        dW = np.outer(dz, self.x)                  # Shape: (output, input)
+
+        # Step 3: db = dz
+        db = dz                                    # Shape: (output, 1)
+
+        # Step 4: Gradient descent step
+        self.W -= learning_rate * dW               # Update weights
+        self.b -= learning_rate * db               # Update biases
+
+        # Step 5: dx = matrix-vector multiplication of W.T and dz
+        dx = np.matmul(self.W.T, dz)               # Shape: (input, 1)
+
+        return dx
+```
 
 ## Citations
 

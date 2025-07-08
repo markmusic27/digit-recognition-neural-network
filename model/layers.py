@@ -27,22 +27,22 @@ class Layer:
         
     # Propagate error backwards, takes in da from next layer
     def backward(self, da, learning_rate):
-        # Step 1: dz = da * sigmoid'(z) 
-        sig_der_at_z = sigmoid_derivative(self.a)  # Shape: (output_size, 1)
-        dz = da * sig_der_at_z
+        # Step 1: dz = da * sigmoid'(z)
+        sig_der_at_z = sigmoid_derivative(self.a)  # Shape: (output, 1)
+        dz = da * sig_der_at_z                     # Element-wise multiply
 
-        # Step 2: dW = dz @ x.T
-        dW = dz @ self.x.T
+        # Step 2: dW = outer product of dz and x
+        dW = np.outer(dz, self.x)                  # Shape: (output, input)
 
-        # Step 3: db = dzs
-        db = dz
+        # Step 3: db = dz
+        db = dz                                    # Shape: (output, 1)
 
         # Step 4: Gradient descent step
-        self.W -= learning_rate * dW
-        self.b -= learning_rate * db
+        self.W -= learning_rate * dW               # Update weights
+        self.b -= learning_rate * db               # Update biases
 
-        # Step 5: dx = W.T @ dz
-        dx = self.W.T @ dz
+        # Step 5: dx = matrix-vector multiplication of W.T and dz
+        dx = np.matmul(self.W.T, dz)               # Shape: (input, 1)
 
         return dx
 
