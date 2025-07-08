@@ -46,22 +46,33 @@ I chose 2 hidden layers with 16 neurons because that's what Grant Sanderson did 
 Each neuron in any layer is defined as follows: it's the weighted sum of all of the activations in the previous layer plus a bias. Each one of these weights determines how much of a previous layer's activation affects the current activation. This is done for every neuron in the layer. We define this weighted sum and the bias as $z$.
 
 $$
-z^{(k)}=W\cdot a^{(k-1)}+b^{(k)}
+\bm{z^{(l)}}=W^{(l)}\cdot \bm{a^{(l-1)}}+\bm{b^{(l)}}
 $$
 
-where $W$ is the weight matrix where the columns correspond to... **FINISH**
+where 
+- $W^{(l)}$ is the weight matrix for layer $l$ through layer $l-1$
+- $\bm{a^{(l-1)}}$ is the activation vector for the layer $l-1$. Think of this as the input to the layer $l$
+- $\bm{b^{(l)}}$ the bias vector for the layer $l$
 
-We then plug this into what's called an activation function. Since we want every activation to be a number between 0 and 1, we use the sigmoid function: $\sigma (x)$. Values that are very small become 0 and values that are very large become 1. The function is defined as
+I emphasize that we conduct this operation layer by layer. This is how the algorithm is designed to run: conducting this linear combination for each layer until we arrive at an output. The way this is built out in code is by establishing a `Layer` class with two methods: `forward` and `backward`. We'll go into backward (which handles backpropagation) later. But all the method does is take a series of inputs $a^{(l-1)}$, compute the aforementioned operation, and spit out the output.
+
+The issue with the operation above is that it spits out values in $\mathbb{R}^n$. Activations are values between 0 and 1. Hence, use an activation function called the sigmoid function. You can think of it as squishing the real number line into values between 0 and 1. Very large values tend to 1 and very small values tend to 0.
 
 $$
 \sigma (x)=\frac{1}{1+e^{-x}}
 $$
 
-**ADD GRAPH**
+![](https://cloud2data.com/activation-function-sigmoid/2560px-Sigmoid-function-2.svg)
 
 Hence, our activations can be written as
 
-$$a^{(k)}=\sigma (z^{(k)})$$
+$$a^{(l)}=\sigma (z^{(l)})$$
+
+- all we're doing is running this linear algebra step again and again
+- costf function
+- minimizing cost with gradient descent
+- backpropagation (stochastic gradient descent)
+- this is what is meant by training
 
 ## Citations
 
