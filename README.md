@@ -39,20 +39,28 @@ Lets get into it. As I mentioned above, Neural Networks are just elaborate math 
   
 The basic structure for the network then looks like this:
 
-**ADD IMAGE**
+![](https://i.ibb.co/JwXXcxkq/Clean-Shot-2025-07-08-at-09-12-49-2x.png)
 
 I chose 2 hidden layers with 16 neurons because that's what Grant Sanderson did in his series, and it renders nicely on the demo website. These are things that you can tweak. What's important to note here is that our hope is that as the data gets processed from the first neuron to the last, the model is able to capture distinguishing features of the image that help it identify which digit it represents. Hence, we can think of each layer as an inner function that modifies the data in such a way that it brings us closer to classifying the image.
+
+### Forward Pass
 
 Each neuron in any layer is defined as follows: it's the weighted sum of all of the activations in the previous layer plus a bias. Each one of these weights determines how much of a previous layer's activation affects the current activation. This is done for every neuron in the layer. We define this weighted sum and the bias as $z$.
 
 $$
-\bm{z^{(l)}}=W^{(l)}\cdot \bm{a^{(l-1)}}+\bm{b^{(l)}}
+\mathbf{z^{(l)}}=W^{(l)}\cdot \mathbf{a^{(l-1)}}+\mathbf{b^{(l)}}
 $$
 
 where 
 - $W^{(l)}$ is the weight matrix for layer $l$ through layer $l-1$
-- $\bm{a^{(l-1)}}$ is the activation vector for the layer $l-1$. Think of this as the input to the layer $l$
-- $\bm{b^{(l)}}$ the bias vector for the layer $l$
+- $\mathbf{a^{(l-1)}}$ is the activation vector for the layer $l-1$. Think of this as the input to the layer $l$
+- $\mathbf{b^{(l)}}$ the bias vector for the layer $l$
+
+This weight matrix is indexed as follows: each entry $w^{(l)}_{jk}$ describes the strength of the connection between the previous activation $a^{(l-1)}_k$ and the current one $a^{(l)}_j$. To clarify, __$j$ is the index of the neuron in the current layer__ and __$k$ is the index of the neuron in the previous layer.__ Moreover, we think of each individual activation as being the dot-product of a __row__ in the weight matrix and the previous activations + a bias.
+
+$$
+z^{(l)}_{k}=W^{(l)}_{(\text{row } k)}\cdot \mathbf{a^{(l-1)}}+b^{(l)}_{k}
+$$
 
 I emphasize that we conduct this operation layer by layer. This is how the algorithm is designed to run: conducting this linear combination for each layer until we arrive at an output. The way this is built out in code is by establishing a `Layer` class with two methods: `forward` and `backward`. We'll go into backward (which handles backpropagation) later. But all the method does is take a series of inputs $a^{(l-1)}$, compute the aforementioned operation, and spit out the output.
 
@@ -66,13 +74,37 @@ $$
 
 Hence, our activations can be written as
 
-$$a^{(l)}=\sigma (z^{(l)})$$
+$$\bm{a^{(l)}}=\sigma (\bm{z^{(l)}})$$
 
-- all we're doing is running this linear algebra step again and again
-- costf function
-- minimizing cost with gradient descent
-- backpropagation (stochastic gradient descent)
-- this is what is meant by training
+Now, we have all of the math we need to implement the forward function:
+```py
+# Returns activation given, old activations, and weights
+    def forward(self, x):
+        self.x = x
+        self.z = np.dot(self.W, x) + self.b
+        self.a = sigmoid(self.z)
+        
+        return self.a
+```
+
+### Backward Pass (Learning)
+
+The big unanswered question at this point is _for what weights and biases is the neural network most accurate?_ What is meant by machine learning, in this context, is tweaking these knobs (weights and biases) to get the best results. To achieve this, we must provide the model with a way for it to determine its performance. We call this the loss function $\mathcal{L}$.
+
+$$
+\mathcal{L}(\mathbf{a}, \mathbf{y})=\frac{1}{2}\|\mathbf{a}-\mathbf{y}\|^2
+$$
+
+We call this the mean squared error loss function. Here, we take the output of a layer, or the model itself, $\mathbf{a}$ and compare it against the expected output $\mathbf{y}$. In other words, the question becomes:
+
+> For what weight and bias values is ${\mathcal{L}}(\mathbf{a}, \mathbf{y})$ smallest. And how can we change these values for $W$ and $b$ such that $\mathcal{L}$ is minimized.
+
+We solve this by taking the gradient of the loss with respect to both the weights ($\frac{\partial \mathcal{L}}{\partial W}$) and the biases ($\frac{\partial \mathcal{L}}{\partial b}$). We can then use these to perform a [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) step. In this example, we use Stochastic Gradient Descent, where backpropagation is performed after every training example. Hence, the gradients aren't averaged like its supposed to be done in conventional gradient descent. Lets find $\frac{\partial \mathcal{L}}{\partial W}$ and $\frac{\partial \mathcal{L}}{\partial b}$ mathematically.
+
+### Finding $\frac{\partial \mathcal{L}}{\partial W}$
+
+
+
 
 ## Citations
 
